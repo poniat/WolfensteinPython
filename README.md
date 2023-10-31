@@ -29,14 +29,6 @@ To run the game, follow these steps:
 - Map rendering using Tiled
 - Enemy AI (pathfindind algorythm... but not yet implemented
 
-## Contributing
-
-We welcome contributions. If you'd like to contribute to this project, please read our [contribution guidelines](CONTRIBUTING.md).
-
-## License
-
-This project is licensed under the [License Name](LICENSE) - see the [LICENSE](LICENSE) file for details.
-
 ## Acknowledgments
 
 - Wall textures from [textures-resource.com](https://www.textures-resource.com/pc_computer/wolf3d/texture/1375/)
@@ -50,10 +42,6 @@ This project is licensed under the [License Name](LICENSE) - see the [LICENSE](L
 ## Authors
 
 - [Wojciech Poniatowski](https://github.com/poniat)
-
-## FAQ
-
-- [FAQ](FAQ.md)
 
 ## Links
 - Inspired by https://youtu.be/ECqUrT7IdqQ
