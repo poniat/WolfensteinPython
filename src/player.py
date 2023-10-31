@@ -85,9 +85,10 @@ class Player:
         self.mouse_control()
 
     def draw(self):
-        # pg.draw.line(self.game.screen, PLAYER_ANGLE_COLOR, (self.x * MAP_RECT_SIZE, self.y * MAP_RECT_SIZE),
-        #               (self.x * MAP_RECT_SIZE + WIDTH * math.cos(self.angle),
-        #                self.y * MAP_RECT_SIZE + WIDTH * math.sin(self.angle)), 2)
+        if IS_2D_MODEL_ENABLED:
+            pg.draw.line(self.game.screen, PLAYER_ANGLE_COLOR, (self.x * MAP_RECT_SIZE, self.y * MAP_RECT_SIZE),
+                        (self.x * MAP_RECT_SIZE + WIDTH * math.cos(self.angle),
+                            self.y * MAP_RECT_SIZE + WIDTH * math.sin(self.angle)), 2)
         pg.draw.circle(self.game.screen, PLAYER_COLOR, (self.x * MAP_RECT_SIZE, self.y * MAP_RECT_SIZE), PLAYER_SIZE)
 
     def get_starting_position(self, tmx):
@@ -95,7 +96,7 @@ class Player:
         for row_index, row in enumerate(layer_data):
             for column_index, cell in enumerate(row):
                 if cell != 0:
-                    tile = self.game.tmx_map.get_tile_properties(column_index, row_index, TMX_NPC_ITEMS_INDEX)
+                    tile = self.game.tmx_map.get_tile_properties(column_index, row_index, TMX_NPC_LAYER_INDEX)
                     if tile['type'] == 'Player':
                         return column_index + 0.5, row_index + 0.5
 

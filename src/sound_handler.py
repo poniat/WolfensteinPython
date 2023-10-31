@@ -6,6 +6,9 @@ class Sounds(Enum):
     PLAYER_PISTOL = 2
     PLAYER_RIFLE = 3
     PLAYER_MINUGUN = 4
+
+    NPC_PAIN = 10
+    NPC_DEATH = 11
     
 
 class SoundHandler:
@@ -19,6 +22,8 @@ class SoundHandler:
         self.sounds[Sounds.PLAYER_PISTOL] = pg.mixer.Sound('assets/sounds/pistol-fire.ogg')
         #self.sounds[Sounds.PLAYER_RIFLE] = pg.mixer.Sound('assets/sounds/rifle-fire.ogg')
         #self.sounds[Sounds.PLAYER_MINUGUN] = pg.mixer.Sound('assets/sounds/minigun-fire.ogg')
+        self.sounds[Sounds.NPC_PAIN] = pg.mixer.Sound('assets/sounds/npc_pain.wav')
+        self.sounds[Sounds.NPC_DEATH] = pg.mixer.Sound('assets/sounds/npc_death.wav')
 
     def play_sound(self, sound_name):
         if sound_name in self.sounds:

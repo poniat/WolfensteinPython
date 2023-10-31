@@ -12,6 +12,7 @@ from animated_sprite import *
 from sprite_handler import *
 from weapon import *
 from sound_handler import *
+from npc import *
 
 class Game:
     def __init__(self):
@@ -32,6 +33,7 @@ class Game:
         self.sprite_handler = SpriteHandler(self)
         self.weapon = Weapon(self)
         self.sound_handler = SoundHandler()
+        self.npc = Npc(self)
         
     def update(self):
         self.player.update()
@@ -43,11 +45,19 @@ class Game:
         pg.display.set_caption(f'{self.clock.get_fps() :.1f}')
         
     def draw(self):
-        self.wall_renderer.draw()
-        if self.is_minimap_visible:
+        if IS_2D_MODEL_ENABLED:
+            self.screen.fill('black')
             self.map.draw()
             self.player.draw()
-        self.weapon.draw()
+            self.weapon.draw()
+        else:
+            self.wall_renderer.draw()
+            self.weapon.draw()
+            if self.is_minimap_visible:
+                self.map.draw()
+                self.player.draw()
+        
+        
 
     def load_tiled_map(self, tmx_file):
         tmx_map = pytmx.TiledMap(tmx_file)
