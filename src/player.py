@@ -6,8 +6,8 @@ from sound_handler import *
 class Player:
     def __init__(self, game):
         self.game = game
-        #self.x, self.y = PLAYER_START_POSITION
-        self.x, self.y = self.get_starting_position(self.game.tmx_map)
+        self.x, self.y = PLAYER_START_POSITION
+        #self.x, self.y = self.get_starting_position(self.game.tmx_map)
         self.angle = PLAYER_ANGLE
         self.shot = False
         
@@ -93,8 +93,8 @@ class Player:
     def get_starting_position(self, tmx):
         layer_date = self.game.tmx_map.get_layer_by_name('npc').data
         for row_index, row in enumerate(layer_date):
-            if 15 in row:
-                column_index = row.index(15)
+            if 11 in row:
+                column_index = row.index(11)
                 return column_index + 0.5, row_index + 0.5
 
     @property

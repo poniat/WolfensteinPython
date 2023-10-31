@@ -1,5 +1,6 @@
 import pygame as pg
 from settings import *
+from pytmx import *
 
 class WallRenderer:
     def __init__(self, game):
@@ -32,19 +33,14 @@ class WallRenderer:
         return pg.transform.scale(texture, res)
     
     def load_wall_textures(self):
-        return {
-            1: self.get_texture('assets/textures/wood_wall.png'),
-            2: self.get_texture('assets/textures/wood_wall_eagle.png'),
-            3: self.get_texture('assets/textures/wood_wall_hitler.png'),
-            4: self.get_texture('assets/textures/blue_wall_brick.png'),
-            5: self.get_texture('assets/textures/wall_1_64.png'),
-            6: self.get_texture('assets/textures/wall_2_64.png'),
-            7: self.get_texture('assets/textures/wall_3_64.png'),
-            8: self.get_texture('assets/textures/wall_4_64.png'),
-            9: self.get_texture('assets/textures/blue_wall_brick_verboten.png'),
-            10: self.get_texture('assets/textures/blue_wall_brick_cage.png'),
-            11: self.get_texture('assets/textures/blue_wall_brick_cage_bones.png'),
-            12: self.get_texture('assets/textures/door_front.png'),
-            13: self.get_texture('assets/textures/door_left.png'),
-            14: self.get_texture('assets/textures/door_right.png'),            
-        }
+        result = {}
+        tmx_map = pytmx.TiledMap("assets/maps/episode1-floor1.tmx") 
+        tile_properties = tmx_map.tile_properties
+
+        for tile_id in tile_properties:
+            if tile_id not in result:
+                tile_prop = tile_properties[tile_id]
+                asset_path = tile_prop['source']
+                final_path = asset_path.replace('..', 'assets')
+                result[tile_id] = self.get_texture(final_path)
+        return result

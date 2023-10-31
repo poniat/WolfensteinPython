@@ -20,7 +20,6 @@ class SpriteHandler:
         for row_index, row in enumerate(items_layer_data):
             for column_index, cell in enumerate(row):
                 if cell != 0:
-                    #tile = tileset.
                     tile = self.game.tmx_map.get_tile_properties(column_index, row_index, 2)
                     asset_path = tile['source']
                     final_path = asset_path.replace('..', 'assets')

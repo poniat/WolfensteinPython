@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.10.2" name="walls" tilewidth="64" tileheight="64" tilecount="14" columns="0">
+<tileset version="1.10" tiledversion="1.10.2" name="walls" tilewidth="64" tileheight="64" tilecount="15" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <image width="64" height="64" source="../textures/wood_wall.png"/>
@@ -42,5 +42,8 @@
  </tile>
  <tile id="13">
   <image width="64" height="64" source="../textures/door_right.png"/>
+ </tile>
+ <tile id="15">
+  <image width="64" height="64" source="../textures/blue_wall_brick_2.png"/>
  </tile>
 </tileset>

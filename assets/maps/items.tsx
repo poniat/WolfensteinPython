@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.10.2" name="items" tilewidth="897" tileheight="1921" tilecount="12" columns="0">
+<tileset version="1.10" tiledversion="1.10.2" name="items" tilewidth="897" tileheight="1921" tilecount="21" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <image width="64" height="64" source="../sprites/static/ammo.png"/>
@@ -36,5 +36,32 @@
  </tile>
  <tile id="11">
   <image width="64" height="64" source="../sprites/static/medkit.png"/>
+ </tile>
+ <tile id="12">
+  <image width="64" height="64" source="../sprites/static/golden_ceiling_lamp.png"/>
+ </tile>
+ <tile id="13">
+  <image width="64" height="64" source="../sprites/static/waze_tree.png"/>
+ </tile>
+ <tile id="14">
+  <image width="64" height="64" source="../sprites/static/barrel.png"/>
+ </tile>
+ <tile id="15">
+  <image width="64" height="64" source="../sprites/static/dog_food.png"/>
+ </tile>
+ <tile id="16">
+  <image width="64" height="64" source="../sprites/static/table.png"/>
+ </tile>
+ <tile id="17">
+  <image width="64" height="64" source="../sprites/static/water.png"/>
+ </tile>
+ <tile id="18">
+  <image width="64" height="64" source="../sprites/static/well.png"/>
+ </tile>
+ <tile id="19">
+  <image width="64" height="64" source="../sprites/static/well_water.png"/>
+ </tile>
+ <tile id="20">
+  <image width="64" height="64" source="../sprites/static/rifle.png"/>
  </tile>
 </tileset>
