@@ -6,7 +6,7 @@ class WallRenderer:
         self.game = game
         self.screen = game.screen
         self.wall_textures = self.load_wall_textures()
-        self.sky_image = self.get_texture('src/resources/textures/sky1.png', (WIDTH, HALF_HEIGHT))
+        self.sky_image = self.get_texture('assets/textures/sky1.png', (WIDTH, HALF_HEIGHT))
         self.sky_offset = 0
 
     def draw(self):
@@ -33,18 +33,18 @@ class WallRenderer:
     
     def load_wall_textures(self):
         return {
-            1: self.get_texture('src/resources/textures/wall_1_64.png'),
-            2: self.get_texture('src/resources/textures/wall_2_64.png'),
-            3: self.get_texture('src/resources/textures/wall_3_64.png'),
-            4: self.get_texture('src/resources/textures/wall_4_64.png'),
-            6: self.get_texture('src/resources/textures/blue_wall_brick.png'),
-            7: self.get_texture('src/resources/textures/wood_wall.png'),
-            8: self.get_texture('src/resources/textures/wood_wall_hitler.png'),
-            9: self.get_texture('src/resources/textures/wood_wall_eagle.png'),
+            1: self.get_texture('assets/textures/wall_1_64.png'),
+            2: self.get_texture('assets/textures/wall_2_64.png'),
+            3: self.get_texture('assets/textures/wall_3_64.png'),
+            4: self.get_texture('assets/textures/wall_4_64.png'),
+            6: self.get_texture('assets/textures/blue_wall_brick.png'),
+            7: self.get_texture('assets/textures/wood_wall.png'),
+            8: self.get_texture('assets/textures/wood_wall_hitler.png'),
+            9: self.get_texture('assets/textures/wood_wall_eagle.png'),
 
-            # 1: self.get_texture('src/resources/textures/stone.png'),
-            # 2: self.get_texture('src/resources/textures/coal_ore.png'),
-            # 3: self.get_texture('src/resources/textures/Diamond_Ore_Block.png'),
-            # 4: self.get_texture('src/resources/textures/redstone_ore.png'),
+            # 1: self.get_texture('assets/textures/stone.png'),
+            # 2: self.get_texture('assets/textures/coal_ore.png'),
+            # 3: self.get_texture('assets/textures/Diamond_Ore_Block.png'),
+            # 4: self.get_texture('assets/textures/redstone_ore.png'),
             
         }

@@ -2,10 +2,10 @@ import pygame as pg
 from settings import *
 
 class Sprite:
-    #def __init__(self, game, path='src/resources/sprites/static/cage.png', position=(29.5, 56.5), scale=1.0, shift=0.0):
-    def __init__(self, game, path='src/resources/sprites/static/knight-armor.png', position=(29.5, 56.5), scale=1.0, shift=0.0):
-    #def __init__(self, game, path='src/resources/sprites/static/ammo.png', position=(29.5, 56.5)):
-    #def __init__(self, game, path='src/resources/sprites/static/medkit.png', position=(29.5, 56.5), scale=1.0, shift=0.0):
+    #def __init__(self, game, path='assets/sprites/static/cage.png', position=(29.5, 56.5), scale=1.0, shift=0.0):
+    def __init__(self, game, path='assets/sprites/static/knight-armor.png', position=(29.5, 56.5), scale=1.0, shift=0.0):
+    #def __init__(self, game, path='assets/sprites/static/ammo.png', position=(29.5, 56.5)):
+    #def __init__(self, game, path='assets/sprites/static/medkit.png', position=(29.5, 56.5), scale=1.0, shift=0.0):
         self.game = game
         self.player = game.player
         self.x, self.y = position

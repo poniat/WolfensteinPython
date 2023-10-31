@@ -7,7 +7,7 @@ from collections import deque
 
 
 class AnimatedSprite(Sprite):
-    def __init__(self, game, path='src/resources/sprites/animated/green_light/0.png',
+    def __init__(self, game, path='assets/sprites/animated/green_light/0.png',
                  position=(39.5, 57.5), scale=0.8, shift=0.15, animation_time=120):
         super().__init__(game, path, position, scale, shift)
         self.animation_time = animation_time

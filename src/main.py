@@ -22,7 +22,7 @@ class Game:
         self.delta_time = 1
         self.new_game()
         self.is_minimap_visible = False
-        #self.tmx_map = self.load_tiled_map("src/resources/maps/episode1-floor1.tmx")
+        #self.tmx_map = self.load_tiled_map("assets/maps/episode1-floor1.tmx")
 
     def new_game(self):
         self.map = Map(self)

@@ -6,8 +6,8 @@ class SpriteHandler:
     def __init__(self, game):
         self.game = game
         self.sprite_list = []
-        self.static_sprite_path = 'src/resources/sprites/static/'
-        self.animated_sprite_path = 'src/resources/sprites/animated/'
+        self.static_sprite_path = 'assets/sprites/static/'
+        self.animated_sprite_path = 'assets/sprites/animated/'
         add_sprite = self.add_sprite
 
         #sprite map
@@ -16,7 +16,7 @@ class SpriteHandler:
 
         add_sprite(Sprite(game, path=self.static_sprite_path + 'lamp_ceiling.png', position=(33.5, 40.5)))
         add_sprite(Sprite(game, path=self.static_sprite_path + 'lamp_ceiling.png', position=(33.5, 44.5)))
-        add_sprite(AnimatedSprite(game, path='src/resources/sprites/npc/guard/walk/0.png', position=(33.5, 45.5), scale=1.0, shift=0.0, animation_time=120))
+        add_sprite(AnimatedSprite(game, path='assets/sprites/npc/guard/walk/0.png', position=(33.5, 45.5), scale=1.0, shift=0.0, animation_time=120))
         add_sprite(Sprite(game, path=self.static_sprite_path + 'lamp_ceiling.png', position=(33.5, 48.5)))
         add_sprite(Sprite(game, path=self.static_sprite_path + 'lamp_ceiling.png', position=(33.5, 52.5)))
         add_sprite(Sprite(game, path=self.static_sprite_path + 'lamp_ceiling.png', position=(33.5, 52.5)))
@@ -26,9 +26,9 @@ class SpriteHandler:
         add_sprite(Sprite(game, path=self.static_sprite_path + 'lamp_ceiling.png', position=(37.5, 61.5)))
         
         add_sprite(Sprite(game, path=self.static_sprite_path + 'food.png', position=(33.5, 62.5)))
-        add_sprite(AnimatedSprite(game, path='src/resources/sprites/npc/guard/walk/0.png', position=(38.5, 61.5), scale=1.0, shift=0.0, animation_time=120))
+        add_sprite(AnimatedSprite(game, path='assets/sprites/npc/guard/walk/0.png', position=(38.5, 61.5), scale=1.0, shift=0.0, animation_time=120))
         add_sprite(Sprite(game, path=self.static_sprite_path + 'ammo.png', position=(39.5, 61.5)))
-        add_sprite(AnimatedSprite(game, path='src/resources/sprites/npc/guard/walk/0.png', position=(27.5, 62.5), scale=1.0, shift=0.0, animation_time=120))
+        add_sprite(AnimatedSprite(game, path='assets/sprites/npc/guard/walk/0.png', position=(27.5, 62.5), scale=1.0, shift=0.0, animation_time=120))
         
         add_sprite(Sprite(game, path=self.static_sprite_path + 'food.png', position=(36.5, 57.5)))
         add_sprite(Sprite(game, path=self.static_sprite_path + 'food.png', position=(28.5, 51.5)))
