@@ -6,9 +6,11 @@ from sound_handler import *
 class Player:
     def __init__(self, game):
         self.game = game
-        self.x, self.y = PLAYER_START_POSITION
+        #self.x, self.y = PLAYER_START_POSITION
+        self.x, self.y = self.get_starting_position(self.game.tmx_map)
         self.angle = PLAYER_ANGLE
         self.shot = False
+        
 
     def single_fire_event(self, event):
         if event.type == pg.MOUSEBUTTONDOWN:
@@ -16,7 +18,6 @@ class Player:
                 self.game.sound_handler.play_sound(Sounds.PLAYER_PISTOL)
                 self.shot = True
                 self.game.weapon.is_reloading = True
-
 
     def movement(self):
         sin_a = math.sin(self.angle)
@@ -88,6 +89,13 @@ class Player:
         #               (self.x * MAP_RECT_SIZE + WIDTH * math.cos(self.angle),
         #                self.y * MAP_RECT_SIZE + WIDTH * math.sin(self.angle)), 2)
         pg.draw.circle(self.game.screen, PLAYER_COLOR, (self.x * MAP_RECT_SIZE, self.y * MAP_RECT_SIZE), PLAYER_SIZE)
+
+    def get_starting_position(self, tmx):
+        layer_date = self.game.tmx_map.get_layer_by_name('npc').data
+        for row_index, row in enumerate(layer_date):
+            if 15 in row:
+                column_index = row.index(15)
+                return column_index + 0.5, row_index + 0.5
 
     @property
     def position(self):

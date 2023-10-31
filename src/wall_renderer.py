@@ -33,18 +33,18 @@ class WallRenderer:
     
     def load_wall_textures(self):
         return {
-            1: self.get_texture('assets/textures/wall_1_64.png'),
-            2: self.get_texture('assets/textures/wall_2_64.png'),
-            3: self.get_texture('assets/textures/wall_3_64.png'),
-            4: self.get_texture('assets/textures/wall_4_64.png'),
-            6: self.get_texture('assets/textures/blue_wall_brick.png'),
-            7: self.get_texture('assets/textures/wood_wall.png'),
-            8: self.get_texture('assets/textures/wood_wall_hitler.png'),
-            9: self.get_texture('assets/textures/wood_wall_eagle.png'),
-
-            # 1: self.get_texture('assets/textures/stone.png'),
-            # 2: self.get_texture('assets/textures/coal_ore.png'),
-            # 3: self.get_texture('assets/textures/Diamond_Ore_Block.png'),
-            # 4: self.get_texture('assets/textures/redstone_ore.png'),
-            
+            1: self.get_texture('assets/textures/wood_wall.png'),
+            2: self.get_texture('assets/textures/wood_wall_eagle.png'),
+            3: self.get_texture('assets/textures/wood_wall_hitler.png'),
+            4: self.get_texture('assets/textures/blue_wall_brick.png'),
+            5: self.get_texture('assets/textures/wall_1_64.png'),
+            6: self.get_texture('assets/textures/wall_2_64.png'),
+            7: self.get_texture('assets/textures/wall_3_64.png'),
+            8: self.get_texture('assets/textures/wall_4_64.png'),
+            9: self.get_texture('assets/textures/blue_wall_brick_verboten.png'),
+            10: self.get_texture('assets/textures/blue_wall_brick_cage.png'),
+            11: self.get_texture('assets/textures/blue_wall_brick_cage_bones.png'),
+            12: self.get_texture('assets/textures/door_front.png'),
+            13: self.get_texture('assets/textures/door_left.png'),
+            14: self.get_texture('assets/textures/door_right.png'),            
         }

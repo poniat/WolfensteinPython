@@ -1,6 +1,6 @@
 import pygame as pg
 import sys
-#import pytmx
+import pytmx
 
 from settings import *
 from map import *
@@ -20,11 +20,11 @@ class Game:
         self.screen = pg.display.set_mode(RES)
         self.clock = pg.time.Clock()
         self.delta_time = 1
-        self.new_game()
+        self.tmx_map = self.load_tiled_map("assets/maps/episode1-floor1.tmx")
         self.is_minimap_visible = False
-        #self.tmx_map = self.load_tiled_map("assets/maps/episode1-floor1.tmx")
-
-    def new_game(self):
+        self.new_game()
+        
+    def new_game(self):        
         self.map = Map(self)
         self.player = Player(self)
         self.wall_renderer = WallRenderer(self)
@@ -49,9 +49,9 @@ class Game:
             self.player.draw()
         self.weapon.draw()
 
-    # def load_tiled_map(self, tmx_file):
-    #     tmx_map = pytmx.TiledMap(tmx_file)
-    #     return tmx_map      
+    def load_tiled_map(self, tmx_file):
+        tmx_map = pytmx.TiledMap(tmx_file)
+        return tmx_map      
 
     def check_events(self):
         for event in pg.event.get():

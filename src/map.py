@@ -1,4 +1,5 @@
 import pygame as pg
+import pytmx
 from settings import *
 _ = False
 
@@ -79,7 +80,7 @@ map1 = [
     [1, _, _, 1, 1, 1, 1, _, _, _, 1, 2, 1, _, _, 1],
     [2, _, _, _, _, _, 1, _, _, _, _, _, 2, _, _, 2],
     [1, _, _, _, _, _, 2, _, _, _, _, _, 1, _, _, 1],
-    [1, _, _, 1, 2, 1, 1, _, _, _, _, _, _, _, _, 1],
+    [1, _, _, 1, 2, 1, 1, _, _, _, 3, _, _, _, _, 1],
     [1, _, _, _, _, _, _, _, _, _, _, _, _, _, _, 1],
     [1, _, _, 1, _, _, _, 1, _, _, _, _, _, _, _, 1],
     [1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1],
@@ -126,14 +127,15 @@ map2 = [
 class Map:
     def __init__(self, game):
         self.game = game
-        self.mini_map = map_episode1_floor1
+        self.mini_map = self.game.tmx_map.get_layer_by_name('wall').data
+        #self.mini_map_new = self.game.tmx_map.layers[0].data
         self.world_map = {}
         self.get_map()
 
     def get_map(self):
         for j, row in enumerate(self.mini_map):
             for i, value in enumerate(row):
-                if value:
+                if value != 0:
                     self.world_map[(i, j)] = value
 
     def draw(self):

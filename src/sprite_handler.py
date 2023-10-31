@@ -1,46 +1,30 @@
+from main import *
 from typing import Any
 from sprite import *
 from animated_sprite import *
+from pytmx import *
+
 
 class SpriteHandler:
-    def __init__(self, game):
+    def __init__(self, game: Game):
         self.game = game
         self.sprite_list = []
         self.static_sprite_path = 'assets/sprites/static/'
         self.animated_sprite_path = 'assets/sprites/animated/'
         add_sprite = self.add_sprite
 
-        #sprite map
-        #starting prison
-        add_sprite(Sprite(game, path=self.static_sprite_path + 'guard_dead.png', position=(30.5, 57.5)))
+        items_layer = self.game.tmx_map.get_layer_by_name('items')
+        items_layer_data = items_layer.data
+        tileset: TiledTileset = self.game.tmx_map.tilesets[1]  # Assuming there's only one tileset
 
-        add_sprite(Sprite(game, path=self.static_sprite_path + 'lamp_ceiling.png', position=(33.5, 40.5)))
-        add_sprite(Sprite(game, path=self.static_sprite_path + 'lamp_ceiling.png', position=(33.5, 44.5)))
-        add_sprite(AnimatedSprite(game, path='assets/sprites/npc/guard/walk/0.png', position=(33.5, 45.5), scale=1.0, shift=0.0, animation_time=120))
-        add_sprite(Sprite(game, path=self.static_sprite_path + 'lamp_ceiling.png', position=(33.5, 48.5)))
-        add_sprite(Sprite(game, path=self.static_sprite_path + 'lamp_ceiling.png', position=(33.5, 52.5)))
-        add_sprite(Sprite(game, path=self.static_sprite_path + 'lamp_ceiling.png', position=(33.5, 52.5)))
-        add_sprite(Sprite(game, path=self.static_sprite_path + 'lamp_ceiling.png', position=(33.5, 57.5)))
-        add_sprite(Sprite(game, path=self.static_sprite_path + 'lamp_ceiling.png', position=(33.5, 61.5)))
-        add_sprite(Sprite(game, path=self.static_sprite_path + 'lamp_ceiling.png', position=(29.5, 61.5)))
-        add_sprite(Sprite(game, path=self.static_sprite_path + 'lamp_ceiling.png', position=(37.5, 61.5)))
-        
-        add_sprite(Sprite(game, path=self.static_sprite_path + 'food.png', position=(33.5, 62.5)))
-        add_sprite(AnimatedSprite(game, path='assets/sprites/npc/guard/walk/0.png', position=(38.5, 61.5), scale=1.0, shift=0.0, animation_time=120))
-        add_sprite(Sprite(game, path=self.static_sprite_path + 'ammo.png', position=(39.5, 61.5)))
-        add_sprite(AnimatedSprite(game, path='assets/sprites/npc/guard/walk/0.png', position=(27.5, 62.5), scale=1.0, shift=0.0, animation_time=120))
-        
-        add_sprite(Sprite(game, path=self.static_sprite_path + 'food.png', position=(36.5, 57.5)))
-        add_sprite(Sprite(game, path=self.static_sprite_path + 'food.png', position=(28.5, 51.5)))
-        
-        add_sprite(Sprite(game, path=self.static_sprite_path + 'bones2.png', position=(27.5, 51.5)))
-        #add_sprite(Sprite(game, path=self.static_sprite_path + 'bones2.png', position=(39.5, 57.5)))
-        add_sprite(Sprite(game, path=self.static_sprite_path + 'bones1.png', position=(37.5, 52.5)))
-        
-        #add_sprite(Sprite(game, path=self.static_sprite_path + 'candlebra.png', position=(37.5, 52.5), scale=0.7, shift=0.27))
-        
-        
-        #add_sprite(AnimatedSprite(game, path=self.animated_sprite_path + 'green_light/0.png', position=(39.5, 57.5)))
+        for row_index, row in enumerate(items_layer_data):
+            for column_index, cell in enumerate(row):
+                if cell != 0:
+                    #tile = tileset.
+                    tile = self.game.tmx_map.get_tile_properties(column_index, row_index, 2)
+                    asset_path = tile['source']
+                    final_path = asset_path.replace('..', 'assets')
+                    add_sprite(Sprite(game, path=final_path, position=(column_index + 0.5, row_index + 0.5)))
 
     def update(self):
         [sprite.update() for sprite in self.sprite_list]
