@@ -6,8 +6,8 @@ from sound_handler import *
 class Player:
     def __init__(self, game):
         self.game = game
-        self.x, self.y = PLAYER_START_POSITION
-        #self.x, self.y = self.get_starting_position(self.game.tmx_map)
+        #self.x, self.y = PLAYER_START_POSITION
+        self.x, self.y = self.get_starting_position(self.game.tmx_map)
         self.angle = PLAYER_ANGLE
         self.shot = False
         
@@ -91,11 +91,13 @@ class Player:
         pg.draw.circle(self.game.screen, PLAYER_COLOR, (self.x * MAP_RECT_SIZE, self.y * MAP_RECT_SIZE), PLAYER_SIZE)
 
     def get_starting_position(self, tmx):
-        layer_date = self.game.tmx_map.get_layer_by_name('npc').data
-        for row_index, row in enumerate(layer_date):
-            if 11 in row:
-                column_index = row.index(11)
-                return column_index + 0.5, row_index + 0.5
+        layer_data = self.game.tmx_map.get_layer_by_name('npc').data
+        for row_index, row in enumerate(layer_data):
+            for column_index, cell in enumerate(row):
+                if cell != 0:
+                    tile = self.game.tmx_map.get_tile_properties(column_index, row_index, TMX_NPC_ITEMS_INDEX)
+                    if tile['type'] == 'Player':
+                        return column_index + 0.5, row_index + 0.5
 
     @property
     def position(self):

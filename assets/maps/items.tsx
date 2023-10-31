@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.10" tiledversion="1.10.2" name="items" tilewidth="897" tileheight="1921" tilecount="39" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
- <tile id="0">
+ <tile id="0" type="Ammo">
   <image width="64" height="64" source="../sprites/static/ammo.png"/>
  </tile>
  <tile id="1">
@@ -25,7 +25,7 @@
  <tile id="7">
   <image width="64" height="64" source="../sprites/static/guard_dead.png"/>
  </tile>
- <tile id="8">
+ <tile id="8" type="Guard">
   <image width="64" height="64" source="../sprites/static/guard_stand.png"/>
  </tile>
  <tile id="9">
@@ -34,7 +34,7 @@
  <tile id="10">
   <image width="64" height="64" source="../sprites/static/lamp_ceiling.png"/>
  </tile>
- <tile id="11">
+ <tile id="11" type="Medkit">
   <image width="64" height="64" source="../sprites/static/medkit.png"/>
  </tile>
  <tile id="12">
@@ -61,7 +61,7 @@
  <tile id="19">
   <image width="64" height="64" source="../sprites/static/well_water.png"/>
  </tile>
- <tile id="20">
+ <tile id="20" type="Rifle">
   <image width="64" height="64" source="../sprites/static/rifle.png"/>
  </tile>
  <tile id="21">
