@@ -1,0 +1,58 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "episode1-floor1.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "Guard.tsx": {
+            "scaleInDock": 1
+        },
+        "ammo.tsx": {
+            "scaleInDock": 1
+        },
+        "blue_wall_brick.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "bones1.tsx": {
+            "scaleInDock": 1
+        },
+        "episode1-floor1.tmx": {
+            "scale": 0.75,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 2430.6666666666665,
+                "y": 3634.6666666666665
+            }
+        },
+        "food.tsx": {
+            "scaleInDock": 1
+        },
+        "lamp_ceiling.tsx": {
+            "scaleInDock": 1
+        }
+    },
+    "map.height": 64,
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 64,
+    "map.tileWidth": 64,
+    "map.width": 64,
+    "openFiles": [
+        "blue_wall_brick.tsx",
+        "episode1-floor1.tmx"
+    ],
+    "project": "wolfenstein-doom-episode-1-floor-1.tiled-project",
+    "recentFiles": [
+        "blue_wall_brick.tsx",
+        "episode1-floor1.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 64,
+        "width": 64
+    }
+}
