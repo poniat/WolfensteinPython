@@ -37,7 +37,7 @@ To run the game, follow these steps:
 ## Screenshots
 
 ![Screenshot 1](/screenshots/game1.png)
-![Screenshot 2](/screenshots/tiled1.png)
+![Screenshot 2](/screenshots/Tiled1.png)
 
 ## Authors
 
