@@ -26,6 +26,15 @@ class ObjectRenderer:
         self.hud_gold_key_image = self.get_texture('assets/textures/hud_gold_key.png', (8 * GAME_SCALE, 16 * GAME_SCALE))
         self.hud_silver_key_image = self.get_texture('assets/textures/hud_silver_key.png', (8 * GAME_SCALE, 16 * GAME_SCALE))
 
+        self.hud_player_face_damage_0 = self.get_texture('assets/textures/hud_player_health_0.png', (24 * GAME_SCALE, 32 * GAME_SCALE))
+        self.hud_player_face_damage_1 = self.get_texture('assets/textures/hud_player_health_1.png', (24 * GAME_SCALE, 32 * GAME_SCALE))
+        self.hud_player_face_damage_2 = self.get_texture('assets/textures/hud_player_health_2.png', (24 * GAME_SCALE, 32 * GAME_SCALE))
+        self.hud_player_face_damage_3 = self.get_texture('assets/textures/hud_player_health_3.png', (24 * GAME_SCALE, 32 * GAME_SCALE))
+        self.hud_player_face_damage_4 = self.get_texture('assets/textures/hud_player_health_4.png', (24 * GAME_SCALE, 32 * GAME_SCALE))
+        self.hud_player_face_damage_5 = self.get_texture('assets/textures/hud_player_health_5.png', (24 * GAME_SCALE, 32 * GAME_SCALE))
+        self.hud_player_face_damage_6 = self.get_texture('assets/textures/hud_player_health_6.png', (24 * GAME_SCALE, 32 * GAME_SCALE))
+        self.hud_player_face_damage_7 = self.get_texture('assets/textures/hud_player_health_7.png', (24 * GAME_SCALE, 32 * GAME_SCALE))
+
     def draw(self):
         self.draw_background()
         self.render_game_objects()
@@ -39,6 +48,7 @@ class ObjectRenderer:
         self.draw_player_lives()
         self.draw_player_health()
         self.draw_player_ammo()
+        self.draw_player_keys()
         self.draw_player_weapon()
 
     def draw_player_floor(self):
@@ -59,6 +69,29 @@ class ObjectRenderer:
         for i, char in enumerate(lives):
             self.screen.blit(self.digit[char], ((112 * GAME_SCALE - self.digit_width * i), 176 * GAME_SCALE))
 
+    def draw_player_health(self):
+        if self.game.player.health < 0:
+            health = '0'
+            self.screen.blit(self.hud_player_face_damage_0, (135 * GAME_SCALE, 164 * GAME_SCALE))
+        else:
+            health = str(self.game.player.health)[::-1]
+        for i, char in enumerate(health):
+            self.screen.blit(self.digit[char], ((183 * GAME_SCALE - self.digit_width * i), 176 * GAME_SCALE))
+            if self.game.player.health == 100:
+                self.screen.blit(self.hud_player_face_damage_7, (135 * GAME_SCALE, 164 * GAME_SCALE))
+            elif self.game.player.health > 80:
+                self.screen.blit(self.hud_player_face_damage_6, (135 * GAME_SCALE, 164 * GAME_SCALE))
+            elif self.game.player.health > 60:
+                self.screen.blit(self.hud_player_face_damage_5, (135 * GAME_SCALE, 164 * GAME_SCALE))
+            elif self.game.player.health > 45:
+                self.screen.blit(self.hud_player_face_damage_4, (135 * GAME_SCALE, 164 * GAME_SCALE))
+            elif self.game.player.health > 30:
+                self.screen.blit(self.hud_player_face_damage_3, (135 * GAME_SCALE, 164 * GAME_SCALE))
+            elif self.game.player.health > 15:
+                self.screen.blit(self.hud_player_face_damage_2, (135 * GAME_SCALE, 164 * GAME_SCALE))
+            elif self.game.player.health > 0:
+                self.screen.blit(self.hud_player_face_damage_1, (135 * GAME_SCALE, 164 * GAME_SCALE))
+
     def draw_player_ammo(self):
         if self.game.player.ammo < 0:
             ammo = '0'
@@ -66,6 +99,12 @@ class ObjectRenderer:
             ammo = str(self.game.player.ammo)[::-1]
         for i, char in enumerate(ammo):
             self.screen.blit(self.digit[char], ((221 * GAME_SCALE - self.digit_width * i), 176 * GAME_SCALE))
+
+    def draw_player_keys(self):
+        if self.game.player.found_gold_key:
+            self.screen.blit(self.hud_gold_key_image, (240 * GAME_SCALE, 164 * GAME_SCALE))
+        if self.game.player.found_silver_key:
+            self.screen.blit(self.hud_silver_key_image, (240 * GAME_SCALE, 181 * GAME_SCALE))
 
     def draw_player_weapon(self):
         if self.game.player.active_weapon == Weapons.KNIFE:
@@ -79,14 +118,6 @@ class ObjectRenderer:
 
         elif self.game.player.active_weapon == Weapons.MINIGUN:
             self.screen.blit(self.hud_minigun_image, (255 * GAME_SCALE, 168 * GAME_SCALE))
-
-    def draw_player_health(self):
-        if self.game.player.health < 0:
-            health = '0'
-        else:
-            health = str(self.game.player.health)[::-1]
-        for i, char in enumerate(health):
-            self.screen.blit(self.digit[char], ((183 * GAME_SCALE - self.digit_width * i), 176 * GAME_SCALE))
     
     def game_over(self):
         self.screen.blit(self.game_over_image, (0, 0))

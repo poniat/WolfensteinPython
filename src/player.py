@@ -22,14 +22,19 @@ class Player:
         self.floor = 1
         self.score = 100
         self.ammo = 8
+        self.found_gold_key = True
+        self.found_silver_key = True
         self.rel = 0
 
     def restart(self):
         self.health = PLAYER_MAX_HEALTH
         self.ammo = 8
         self.active_weapon = Weapons.PISTOL
+        self.found_gold_key = False
+        self.found_silver_key = False
         self.x, self.y = self.get_starting_position(self.game.tmx_map)
         self.angle = PLAYER_ANGLE
+        
 
     def check_game_over(self):
         if self.health < 1:
