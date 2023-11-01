@@ -6,11 +6,11 @@ from sound_handler import *
 class Player:
     def __init__(self, game):
         self.game = game
-        self.x, self.y = PLAYER_START_POSITION
-        #self.x, self.y = self.get_starting_position(self.game.tmx_map)
+        #self.x, self.y = PLAYER_START_POSITION
+        self.x, self.y = self.get_starting_position(self.game.tmx_map)
         self.angle = PLAYER_ANGLE
         self.shot = False
-        
+        self.health = PLAYER_MAX_HEALTH
 
     def single_fire_event(self, event):
         if event.type == pg.MOUSEBUTTONDOWN:
@@ -76,6 +76,8 @@ class Player:
         mx, my = pg.mouse.get_pos()
         if mx < MOUSE_BORDER_LEFT or mx > MOUSE_BORDER_RIGHT:
             pg.mouse.set_pos([HALF_WIDTH, HALF_HEIGHT])
+        if my < MOUSE_BORDER_TOP or my > MOUSE_BORDER_BOTTOM:
+            pg.mouse.set_pos([HALF_WIDTH, HALF_HEIGHT])
         self.rel = pg.mouse.get_rel()[0]
         self.rel = max(-MOUSE_MAX_REL, min(MOUSE_MAX_REL, self.rel))
         self.angle += self.rel * MOUSE_SENSITIVITY * self.game.delta_time
@@ -85,18 +87,25 @@ class Player:
         self.mouse_control()
 
     def draw(self):
-        # pg.draw.line(self.game.screen, PLAYER_ANGLE_COLOR, (self.x * MAP_RECT_SIZE, self.y * MAP_RECT_SIZE),
-        #               (self.x * MAP_RECT_SIZE + WIDTH * math.cos(self.angle),
-        #                self.y * MAP_RECT_SIZE + WIDTH * math.sin(self.angle)), 2)
+        if IS_2D_MODEL_ENABLED:
+            pg.draw.line(self.game.screen, PLAYER_ANGLE_COLOR, (self.x * MAP_RECT_SIZE, self.y * MAP_RECT_SIZE),
+                        (self.x * MAP_RECT_SIZE + WIDTH * math.cos(self.angle),
+                            self.y * MAP_RECT_SIZE + WIDTH * math.sin(self.angle)), 2)
         pg.draw.circle(self.game.screen, PLAYER_COLOR, (self.x * MAP_RECT_SIZE, self.y * MAP_RECT_SIZE), PLAYER_SIZE)
 
     def get_starting_position(self, tmx):
-        layer_date = self.game.tmx_map.get_layer_by_name('npc').data
-        for row_index, row in enumerate(layer_date):
-            if 11 in row:
-                column_index = row.index(11)
-                return column_index + 0.5, row_index + 0.5
+        layer_data = self.game.tmx_map.get_layer_by_name('npc').data
+        for row_index, row in enumerate(layer_data):
+            for column_index, cell in enumerate(row):
+                if cell != 0:
+                    tile = self.game.tmx_map.get_tile_properties(column_index, row_index, TMX_NPC_LAYER_INDEX)
+                    if tile['type'] == 'Player':
+                        return column_index + 0.5, row_index + 0.5
 
+    def get_damage(self, damage):
+        self.health -= damage
+        self.game.object_renderer.player_damage()
+        
     @property
     def position(self):
         return self.x, self.y

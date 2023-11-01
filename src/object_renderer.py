@@ -2,13 +2,14 @@ import pygame as pg
 from settings import *
 from pytmx import *
 
-class WallRenderer:
+class ObjectRenderer:
     def __init__(self, game):
         self.game = game
         self.screen = game.screen
         self.wall_textures = self.load_wall_textures()
         self.sky_image = self.get_texture('assets/textures/sky1.png', (WIDTH, HALF_HEIGHT))
         self.sky_offset = 0
+        self.blood_screen = self.get_texture('assets/textures/blood_screen.png', RES)
 
     def draw(self):
         self.draw_background()
@@ -44,3 +45,6 @@ class WallRenderer:
                 final_path = asset_path.replace('..', 'assets')
                 result[tile_id] = self.get_texture(final_path)
         return result
+    
+    def player_damage(self):
+        self.screen.blit(self.blood_screen, (0, 0))
