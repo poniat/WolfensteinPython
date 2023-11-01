@@ -38,7 +38,7 @@ class Knife(Weapon):
 
 class Rifle(Weapon):
     def __init__(self, game, type, path='assets/sprites/weapon/rifle/0.png'):
-        super().__init__(game=game, type=type, path=path, scale=GAME_SCALE * 2, animation_time=30)
+        super().__init__(game=game, type=type, path=path, scale=GAME_SCALE * 2, animation_time=35)
 
 class Minigun(Weapon):
     def __init__(self, game, type, path='assets/sprites/weapon/minigun/0.png'):

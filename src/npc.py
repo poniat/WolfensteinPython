@@ -1,6 +1,7 @@
 from animated_sprite import *
 from random import randint, random, choice
 from sound_handler import *
+from main import *
 
 class Npc(AnimatedSprite):
     def __init__(self, game, type, path='assets/sprites/npc/guard/0.png',
@@ -15,17 +16,21 @@ class Npc(AnimatedSprite):
         self.pain_images = self.get_images(self.path + '/pain')
         self.walk_images = self.get_images(self.path + '/walk')
 
+        self.shot = False
+        self.is_reloading = False
         self.idle = True
         self.attack_distance = randint(3, 6)
         self.speed = 0.03
-        self.size = 10
+        self.size = 70
         self.health = 25
         self.kill_score = 100
         self.attack_damage = 10
         self.attack_accuracy = 0.15
         self.alive = True
         self.pain = False
-        self.frame_counter = 0
+        self.attack_frame_counter = 0
+        self.death_frame_counter = 0
+        self.shots_fired = 0
 
         self.is_line_of_sight_to_player = False
 
@@ -40,6 +45,13 @@ class Npc(AnimatedSprite):
                 if self.dist < self.attack_distance:
                     self.animate(self.attack_images)
                     self.attack_player()
+                    if self.is_reloading:
+                        self.shot = False
+                        if self.animation_trigger:
+                            self.attack_frame_counter += 1
+                            if self.attack_frame_counter == len(self.attack_images):
+                                self.is_reloading = False
+                                self.attack_frame_counter = 0
                 else:
                     self.animate(self.walk_images)
                     self.movement()
@@ -59,12 +71,73 @@ class Npc(AnimatedSprite):
             elif rand < 10:
                 self.game.sound_handler.play_sound(Sounds.NPC_TALK_GUTEN_TAG)
         self.idle = False
+
+    def is_player_hit(self):
+        #A random number between 0 and 255 (inclusive). Used for hit calculation.
+        rand1 = randint(0, 255)
         
+        #Distance between enemy and player (in number of squares).
+        dist = self.dist
+
+        #160 (if player is running)
+        #256 (if player isn't)
+        speed = 160
+
+        #16 (if player can see the shooter)
+        #8 (if the player can’t).
+        look = 16
+
+        #Player is considered hit if: [RAND1] < ( [SPEED] - ( [DIST] x [LOOK] ) )
+        print('Shot nr :' + str(self.shots_fired) + '. Hit: ' + str(rand1 < (speed - (dist * look))))
+        return rand1 < (speed - (dist * look))
+
+    
     def attack_player(self):
-        if self.animation_trigger:
-            self.game.sound_handler.play_sound(Sounds.NPC_PISTOL_FIRE)
-            if random() < self.attack_accuracy:
-                self.game.player.get_damage(self.attack_damage)
+        if not self.shot and not self.is_reloading:
+            self.game.sound_handler.play_sound(Sounds.PLAYER_PISTOL)
+            self.shot = True
+            self.shots_fired += 1
+            self.is_reloading = True
+            if self.is_player_hit():
+                # If shooter is SS or Boss then: [DIST] = [DIST] x (2 / 3)
+                # If ( [DIST] less than 2 ) then damage is: [RAND2] / 4
+                damage = 0
+                rand2 = randint(0, 255)
+                if self.dist < 2:
+                    damage = rand2 / 4
+                # If ( [DIST] between 2 and 4 ) then damage is: [RAND2] / 8
+                elif self.dist >= 2 and self.dist < 4:
+                    damage = rand2 / 8
+                # If ( [DIST] is 4 or more ) then damage is: [RAND2] / 16
+                elif self.dist >= 4:
+                    damage = rand2 / 16
+
+                if GAME_DIFFICULTY == Difficulty.EASY_CAN_I_PLAY_DADDY:
+                    damage /= 2
+                elif GAME_DIFFICULTY == Difficulty.HARD_BRING_EM_ON:
+                    damage *= 2
+                elif GAME_DIFFICULTY == Difficulty.IMPOSSIBLE_IAM_DEATH_INCARNATE:
+                    damage *= 4
+
+                print('Damage to player: ' + str(int(damage)))
+
+                if damage > 0:
+                    self.player.get_damage(damage)
+
+            
+
+            # If “Can I play daddy” then [DAMAGE] = [DAMAGE] / 4
+
+            # if self.dist >= 4 and randint(0, 255) / 12 < self.dist:
+            #     damage = randint(0, 255) / 6
+            #     self.player.get_damage(damage)
+            # elif self.dist < 2:
+            #     damage = randint(0, 255) / 4
+            #     self.player.get_damage(damage)
+            # elif self.dist >= 2:
+            #     damage = randint(0, 255) / 6
+            #     self.player.get_damage(damage)
+
 
     def update(self):
         self.check_animation_time()
@@ -91,10 +164,10 @@ class Npc(AnimatedSprite):
 
     def animate_death(self):
         if not self.alive:
-            if self.animation_trigger and self.frame_counter < len(self.death_images) - 1:
+            if self.animation_trigger and self.death_frame_counter < len(self.death_images) - 1:
                 self.death_images.rotate(-1)
                 self.image = self.death_images[0]
-                self.frame_counter += 1
+                self.death_frame_counter += 1
         
     def animate_pain(self):
         self.animate(self.pain_images)
@@ -104,17 +177,38 @@ class Npc(AnimatedSprite):
     def check_if_hit_by_player(self):
         if self.is_line_of_sight_to_player and self.game.player.shot:
             if HALF_WIDTH - self.sprite_half_width < self.screen_x < HALF_WIDTH + self.sprite_half_width:
-                self.game.sound_handler.play_sound(Sounds.NPC_PAIN)
+                rand1 = randint(0, 255)
+                if self.dist >= 4 and not rand1 / 12 < self.dist:
+                    return                                  
                 self.game.player.shot = False
+                self.game.sound_handler.play_sound(Sounds.NPC_PAIN)
                 self.pain = True
-                self.health -= self.game.weapon.damage
+                self.health -= self.calculate_damage_to_npc()
                 self.check_health()
+
+    def calculate_damage_to_npc(self):
+        damage = 0
+        if self.game.player.active_weapon == Weapons.KNIFE:
+            rand2 = randint(0, 255)
+            damage = rand2 / 16
+        if self.dist >= 2:
+            rand2 = randint(0, 255)
+            damage = rand2 / 6
+        else:
+            rand2 = randint(0, 255)
+            damage = rand2 / 4
+        return damage
+
 
     def check_health(self):
         if self.health < 1:
             self.alive = False
-            self.game.sound_handler.play_sound(Sounds.NPC_DEATH)
-            self.game.sprite_handler.add_sprite(Sprite(self.game, type='ammo', path='assets/sprites/static/ammo.png', position=(self.x, self.y)))
+            self.game.player.score += self.kill_score
+            self.die()
+
+    def die(self):
+        self.game.sound_handler.play_sound(Sounds.NPC_GUARD_DEATH)
+        self.game.sprite_handler.add_sprite(Sprite(self.game, type='enemy_ammo', path='assets/sprites/static/ammo.png', position=(self.x, self.y)))
 
     @property
     def map_pos(self):
@@ -180,16 +274,16 @@ class Npc(AnimatedSprite):
             y_vert += dy
             depth_vert += delta_depth
 
-        player_dist = max(player_dist_v, player_dist_h)
+        self.player_dist = max(player_dist_v, player_dist_h)
         wall_dist = max(wall_dist_v, wall_dist_h)
 
-        if 0 < player_dist < wall_dist or not wall_dist:
+        if 0 < self.player_dist < wall_dist or not wall_dist:
             return True
         return False
     
     def draw_ray_cast(self):
-        if IS_2D_MODEL_ENABLED:
-            pg.draw.circle(self.game.screen, 'red', (MAP_RECT_SIZE * self.x, MAP_RECT_SIZE * self.y), self.size)
+        if IS_2D_MODEL_ENABLED or self.game.is_minimap_visible:
+            pg.draw.circle(self.game.screen, 'red', (MAP_RECT_SIZE * self.x, MAP_RECT_SIZE * self.y), self.size / MAP_RECT_SIZE)
             if self.raycast_line_of_sight_npc_to_player():
                 pg.draw.line(self.game.screen, 'orange', (MAP_RECT_SIZE * self.game.player.x, MAP_RECT_SIZE * self.game.player.y),
                             (MAP_RECT_SIZE * self.x, MAP_RECT_SIZE * self.y), 2)
@@ -210,3 +304,27 @@ class Dog(Npc):
         self.kill_score = 200
         self.attack_damage = 10
         self.attack_accuracy = 0.15
+
+    def die(self):
+        self.game.sound_handler.play_sound(Sounds.NPC_DOG_DEATH)
+
+class SS(Npc):
+    def __init__(self, game, type, path='assets/sprites/npc/ss/0.png',
+                 pos=(35.5, 61.5),
+                 scale=1.0,
+                 shift=0.0,
+                 animation_time=200):
+        super().__init__(game, type, path, pos, scale, shift, animation_time)
+              
+        self.attack_distance = randint(2, 8)
+        self.speed = 0.05
+        self.size = 15
+        self.health = 100
+        self.kill_score = 500
+        self.attack_damage = randint(1, 15)
+        self.attack_accuracy = 0.15
+
+    
+
+#damage, score, hp
+#https://wl6.fandom.com/wiki/Category:Enemies

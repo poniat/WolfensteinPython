@@ -11,6 +11,7 @@ class Player:
         self.x, self.y = self.get_starting_position(self.game.tmx_map)
         self.angle = PLAYER_ANGLE
         self.shot = False
+        self.size = PLAYER_SIZE
         self.health = PLAYER_MAX_HEALTH
         self.lives = 3
         self.weapon_knife = True
@@ -20,10 +21,10 @@ class Player:
         self.active_weapon = Weapons.PISTOL
         self.episode = 1
         self.floor = 1
-        self.score = 100
+        self.score = 0
         self.ammo = 8
-        self.found_gold_key = True
-        self.found_silver_key = True
+        self.found_gold_key = False
+        self.found_silver_key = False
         self.rel = 0
         self.shoot_continuous = False
         self.last_shot_time = 0
@@ -128,7 +129,7 @@ class Player:
         return (x, y) not in self.game.map.world_map
 
     def check_wall_collision(self, dx, dy):
-        scale = PLAYER_SIZE_SCALE / self.game.delta_time
+        scale = PLAYER_SIZE / self.game.delta_time
         if self.check_wall(int(self.x + dx * scale), int(self.y)):
             self.x += dx
         if self.check_wall(int(self.x), int(self.y + dy * scale)):
@@ -136,17 +137,87 @@ class Player:
     
     def check_sprite_collision(self, dx, dy):
         for sprite in enumerate(self.game.sprite_handler.sprite_list):
-            if sprite[1].type == 'ammo':
-                self.increase_ammo(8)
-                self.game.sound_handler.play_sound(Sounds.AMMO)
-                self.game.sprite_handler.sprite_list.pop(sprite[0])
-                break
-
+            if int(sprite[1].x) == int(self.x) and int(sprite[1].y) == int(self.y):
+                if sprite[1].type == 'enemy_ammo':
+                    self.increase_ammo(4)
+                    self.game.sound_handler.play_sound(Sounds.AMMO)
+                    self.game.sprite_handler.sprite_list.pop(sprite[0])
+                    break
+                if sprite[1].type == 'ammo':
+                    self.increase_ammo(8)
+                    self.game.sound_handler.play_sound(Sounds.AMMO)
+                    self.game.sprite_handler.sprite_list.pop(sprite[0])
+                    break
+                if sprite[1].type == 'food':
+                    self.increase_health(20)
+                    self.game.sound_handler.play_sound(Sounds.FOOD)
+                    self.game.sprite_handler.sprite_list.pop(sprite[0])
+                    break
+                if sprite[1].type == 'dog_food':
+                    self.increase_health(4)
+                    self.game.sound_handler.play_sound(Sounds.DOG_FOOD)
+                    self.game.sprite_handler.sprite_list.pop(sprite[0])
+                    break
+                if sprite[1].type == 'Medkit':
+                    self.increase_health(25)
+                    self.game.sound_handler.play_sound(Sounds.MEDKIT)
+                    self.game.sprite_handler.sprite_list.pop(sprite[0])
+                    break
+                if sprite[1].type == 'key_silver':
+                    self.found_silver_key = True
+                    self.game.sound_handler.play_sound(Sounds.KEY)
+                    self.game.sprite_handler.sprite_list.pop(sprite[0])
+                    break
+                if sprite[1].type == 'key_golden':
+                    self.found_gold_key_key = True
+                    self.game.sound_handler.play_sound(Sounds.KEY)
+                    self.game.sprite_handler.sprite_list.pop(sprite[0])
+                    break
+                if sprite[1].type == 'golden_cross':
+                    self.score += 100
+                    self.game.sound_handler.play_sound(Sounds.GOLDEN_CROSS)
+                    self.game.sprite_handler.sprite_list.pop(sprite[0])
+                    break
+                if sprite[1].type == 'golden_chalice':
+                    self.score += 500
+                    self.game.sound_handler.play_sound(Sounds.GOLDEN_CHALICE)
+                    self.game.sprite_handler.sprite_list.pop(sprite[0])
+                    break
+                if sprite[1].type == 'golden_chest':
+                    self.score += 1000
+                    self.game.sound_handler.play_sound(Sounds.GOLDEN_CHEST)
+                    self.game.sprite_handler.sprite_list.pop(sprite[0])
+                    break
+                if sprite[1].type == 'golden_crown':
+                    self.score += 5000
+                    self.game.sound_handler.play_sound(Sounds.GOLDEN_CROWN)
+                    self.game.sprite_handler.sprite_list.pop(sprite[0])
+                    break
+                if sprite[1].type == 'Rifle':
+                    self.weapon_rifle = True
+                    self.game.sound_handler.play_sound(Sounds.GOLDEN_CROWN)
+                    self.game.sprite_handler.sprite_list.pop(sprite[0])
+                    break
+                if sprite[1].type == 'Minigun':
+                    self.weapon_rifle = True
+                    self.game.sound_handler.play_sound(Sounds.GOLDEN_CROWN)
+                    self.game.sprite_handler.sprite_list.pop(sprite[0])
+                    break
+                if sprite[1].type == 'life_up':
+                    self.lives += 1
+                    self.game.sound_handler.play_sound(Sounds.PLAYER_1UP)
+                    self.game.sprite_handler.sprite_list.pop(sprite[0])
+                    break
             
     def increase_ammo(self, quantity):
         self.ammo += quantity
         if self.ammo > PLAYER_MAX_AMMO:
             self.ammo = PLAYER_MAX_AMMO
+
+    def increase_health(self, quantity):
+        self.health += quantity
+        if self.health > PLAYER_MAX_HEALTH:
+            self.health = PLAYER_MAX_HEALTH
 
     def mouse_control(self):
         mx, my = pg.mouse.get_pos()
@@ -166,10 +237,10 @@ class Player:
         if keys[pg.K_2]:
             self.active_weapon = Weapons.PISTOL
             self.game.weapon = self.game.pistol
-        if keys[pg.K_3]:
+        if keys[pg.K_3] and self.weapon_rifle:
             self.active_weapon = Weapons.RIFLE
             self.game.weapon = self.game.rifle
-        if keys[pg.K_4]:
+        if keys[pg.K_4 and self.weapon_minigun]:
             self.active_weapon = Weapons.MINIGUN
             self.game.weapon = self.game.minigun    
 
@@ -178,7 +249,7 @@ class Player:
             pg.draw.line(self.game.screen, PLAYER_ANGLE_COLOR, (self.x * MAP_RECT_SIZE, self.y * MAP_RECT_SIZE),
                         (self.x * MAP_RECT_SIZE + WIDTH * math.cos(self.angle),
                             self.y * MAP_RECT_SIZE + WIDTH * math.sin(self.angle)), 2)
-        pg.draw.circle(self.game.screen, PLAYER_COLOR, (self.x * MAP_RECT_SIZE, self.y * MAP_RECT_SIZE), PLAYER_SIZE)
+        pg.draw.circle(self.game.screen, PLAYER_COLOR, (self.x * MAP_RECT_SIZE, self.y * MAP_RECT_SIZE), PLAYER_SIZE / MAP_RECT_SIZE)
 
     def get_starting_position(self, tmx):
         layer_data = self.game.tmx_map.get_layer_by_name('npc').data
@@ -190,7 +261,7 @@ class Player:
                         return column_index + 0.5, row_index + 0.5
 
     def get_damage(self, damage):
-        self.health -= damage
+        self.health -= int(damage)
         if self.health < 0:
             self.health = 0
         self.game.object_renderer.player_damage()

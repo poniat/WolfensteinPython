@@ -4,6 +4,7 @@ import os
 from sprite import *
 from settings import *
 from collections import deque
+from main import *
 
 
 class AnimatedSprite(Sprite):
