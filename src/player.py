@@ -11,6 +11,14 @@ class Player:
         self.angle = PLAYER_ANGLE
         self.shot = False
         self.health = PLAYER_MAX_HEALTH
+        self.rel = 0
+
+    def check_game_over(self):
+        if self.health < 1:
+            self.game.object_renderer.game_over()
+            pg.display.flip()
+            pg.time.delay(2000)
+            self.game.new_game()
 
     def single_fire_event(self, event):
         if event.type == pg.MOUSEBUTTONDOWN:
@@ -104,7 +112,10 @@ class Player:
 
     def get_damage(self, damage):
         self.health -= damage
+        if self.health < 0:
+            self.health = 0
         self.game.object_renderer.player_damage()
+        self.check_game_over()
         
     @property
     def position(self):

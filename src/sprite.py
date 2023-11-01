@@ -41,7 +41,7 @@ class Sprite:
             delta += math.tau
         
         delta_rays = delta / DELTA_ANGLE
-        self.screen_x = (HALF_NUMBER_OF_RAYS + delta_rays) * SCALE
+        self.screen_x = (HALF_NUMBER_OF_RAYS + delta_rays) * RAY_SCALE
 
         self.dist = math.hypot(dx, dy)
         self.norm_dist = self.dist * math.cos(delta)

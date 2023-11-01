@@ -2,13 +2,13 @@ from animated_sprite import *
 
 class Weapon(AnimatedSprite):
     def __init__(self, game, path='assets/sprites/weapon/pistol/0.png',
-                 scale=7.0,
+                 scale=GAME_SCALE,
                  animation_time=90):
         super().__init__(game=game, path=path, scale=scale, animation_time=animation_time)
         self.images = deque(
             [pg.transform.scale(img, (self.image.get_width() * scale, self.image.get_height() * scale))
              for img in self.images])
-        self.weapon_pos = (HALF_WIDTH - self.images[0].get_width() // 2, HEIGHT - self.images[0].get_height())
+        self.weapon_pos = (HALF_WIDTH - self.images[0].get_width() // 2, HEIGHT - self.images[0].get_height() - self.game.object_renderer.hud_background_image.get_height())
         self.is_reloading = False
         self.num_images = len(self.images)
         self.frame_counter = 0
@@ -28,6 +28,7 @@ class Weapon(AnimatedSprite):
     def update(self):
         self.game.screen.blit(self.images[0], self.weapon_pos)
     
-    def draw(self):
+    def draw(self):        
         self.check_animation_time()
         self.animate_shot()
+        

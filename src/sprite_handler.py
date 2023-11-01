@@ -7,7 +7,7 @@ from npc import *
 
 
 class SpriteHandler:
-    def __init__(self, game: Game):
+    def __init__(self, game):
         self.game = game
         self.sprite_list = []
         self.npc_list = []

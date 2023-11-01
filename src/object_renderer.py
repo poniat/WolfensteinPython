@@ -1,19 +1,41 @@
 import pygame as pg
 from settings import *
 from pytmx import *
+from main import *
 
 class ObjectRenderer:
-    def __init__(self, game):
+    def __init__(self, game: Game):
         self.game = game
         self.screen = game.screen
         self.wall_textures = self.load_wall_textures()
         self.sky_image = self.get_texture('assets/textures/sky1.png', (WIDTH, HALF_HEIGHT))
         self.sky_offset = 0
-        self.blood_screen = self.get_texture('assets/textures/blood_screen.png', RES)
+        self.blood_screen = self.get_texture('assets/textures/blood_screen.png', RESOLUTION)
+        self.digit_width = 8 * GAME_SCALE
+        self.digit_height = 16 * GAME_SCALE
+        self.digit_images = [self.get_texture(f'assets/textures/hud-digits/{i}.png', (self.digit_width, self.digit_height))
+                             for i in range(10)]
+        self.digit = dict(zip(map(str, range(10)), self.digit_images))
+        self.hud_background_image = self.get_texture('assets/textures/hud_background.png', (320 * GAME_SCALE, 40 * GAME_SCALE))
+        self.game_over_image = self.get_texture('assets/textures/game_over.png', RESOLUTION)
 
     def draw(self):
         self.draw_background()
         self.render_game_objects()
+        self.draw_hud()
+        
+
+    def draw_hud(self):
+        self.screen.blit(self.hud_background_image, (HALF_WIDTH - self.hud_background_image.get_width() // 2, HEIGHT - self.hud_background_image.get_height()))
+        self.draw_player_health()
+
+    def draw_player_health(self):
+        health = str(self.game.player.health)[::-1]
+        for i, char in enumerate(health):
+            self.screen.blit(self.digit[char], ((183 * GAME_SCALE - self.digit_width * i), 176 * GAME_SCALE))
+    
+    def game_over(self):
+        self.screen.blit(self.game_over_image, (0, 0))
 
     def draw_background(self):
         #sky
