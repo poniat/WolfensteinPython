@@ -3,7 +3,7 @@ from animated_sprite import *
 class Weapon(AnimatedSprite):
     def __init__(self, game, path='assets/sprites/weapon/pistol/0.png',
                  scale=GAME_SCALE,
-                 animation_time=90):
+                 animation_time=80):
         super().__init__(game=game, path=path, scale=scale, animation_time=animation_time)
         self.images = deque(
             [pg.transform.scale(img, (self.image.get_width() * scale, self.image.get_height() * scale))

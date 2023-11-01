@@ -1,0 +1,14 @@
+from enum import Enum
+
+class Sounds(Enum):
+    PLAYER_KNIFE = 1
+    PLAYER_PISTOL = 2
+    PLAYER_RIFLE = 3
+    PLAYER_MINUGUN = 4
+
+    NPC_PAIN = 10
+    NPC_DEATH = 11
+    NPC_PISTOL_FIRE = 12
+    NPC_TALK_KOMM_HIER_SCHWEIN = 13
+    NPC_TALK_GUTEN_TAG = 14
+    NPC_TALK_SCHUTZ_STAFFEL = 15

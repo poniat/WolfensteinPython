@@ -2,6 +2,7 @@ from settings import *
 import pygame as pg
 import math
 from sound_handler import *
+from weapons import *
 
 class Player:
     def __init__(self, game):
@@ -11,21 +12,51 @@ class Player:
         self.angle = PLAYER_ANGLE
         self.shot = False
         self.health = PLAYER_MAX_HEALTH
+        self.lives = 3
+        self.weapon_knife = True
+        self.weapon_pistol = True
+        self.weapon_rifle = False
+        self.weapon_minigun = False
+        self.active_weapon = Weapons.PISTOL
+        self.episode = 1
+        self.floor = 1
+        self.score = 100
+        self.ammo = 8
         self.rel = 0
+
+    def restart(self):
+        self.health = PLAYER_MAX_HEALTH
+        self.ammo = 8
+        self.active_weapon = Weapons.PISTOL
+        self.x, self.y = self.get_starting_position(self.game.tmx_map)
+        self.angle = PLAYER_ANGLE
 
     def check_game_over(self):
         if self.health < 1:
-            self.game.object_renderer.game_over()
-            pg.display.flip()
-            pg.time.delay(2000)
-            self.game.new_game()
+            self.lives -= 1
+            if self.lives > 0:
+                self.game.object_renderer.game_over()
+                pg.display.flip()
+                pg.time.delay(2000)
+                self.game.restart_floor()
+            else:
+                self.game.quit()
 
     def single_fire_event(self, event):
         if event.type == pg.MOUSEBUTTONDOWN:
             if event.button == 1 and not self.shot and not self.game.weapon.is_reloading:
-                self.game.sound_handler.play_sound(Sounds.PLAYER_PISTOL)
-                self.shot = True
-                self.game.weapon.is_reloading = True
+                if self.active_weapon == Weapons.KNIFE:
+                    self.game.sound_handler.play_sound(Sounds.PLAYER_KNIFE)
+                    self.game.weapon.is_reloading = True
+                else:
+                    if self.ammo > 0:
+                        self.ammo -= 1
+                        self.game.sound_handler.play_sound(Sounds.PLAYER_PISTOL)
+                        self.shot = True
+                        self.game.weapon.is_reloading = True
+                    else:
+                        #no ammo
+                        pass
 
     def movement(self):
         sin_a = math.sin(self.angle)
@@ -90,9 +121,21 @@ class Player:
         self.rel = max(-MOUSE_MAX_REL, min(MOUSE_MAX_REL, self.rel))
         self.angle += self.rel * MOUSE_SENSITIVITY * self.game.delta_time
 
+    def change_weapon(self):
+        keys = pg.key.get_pressed()
+        if keys[pg.K_1]:
+            self.active_weapon = Weapons.KNIFE
+        if keys[pg.K_2]:
+            self.active_weapon = Weapons.PISTOL
+        if keys[pg.K_3]:
+            self.active_weapon = Weapons.RIFLE
+        if keys[pg.K_4]:
+            self.active_weapon = Weapons.MINIGUN
+
     def update(self):
         self.movement()
         self.mouse_control()
+        self.change_weapon()
 
     def draw(self):
         if IS_2D_MODEL_ENABLED:

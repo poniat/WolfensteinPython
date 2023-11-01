@@ -26,7 +26,12 @@ class Game:
         self.tmx_map = self.load_tiled_map("assets/maps/episode1-floor1.tmx")
         self.is_minimap_visible = False
         self.new_game()
+
+    def restart_floor(self):
+        self.sprite_handler = SpriteHandler(self)
+        self.player.restart()
         
+
     def new_game(self):        
         self.map = Map(self)
         self.player = Player(self)
@@ -68,8 +73,7 @@ class Game:
     def check_events(self):
         for event in pg.event.get():
             if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
-                pg.quit()
-                sys.exit()
+                self.quit()
             self.player.single_fire_event(event)
 
     def run(self):
@@ -77,7 +81,11 @@ class Game:
             self.check_events()
             self.update()
             self.draw()
-   
+
+    def quit(self):
+        pg.quit()
+        sys.exit()
+        
 if __name__ == '__main__':
     game = Game()
     game.run()
