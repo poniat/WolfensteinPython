@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.10.2" name="items" tilewidth="897" tileheight="1921" tilecount="39" columns="0">
+<tileset version="1.10" tiledversion="1.10.2" name="items" tilewidth="897" tileheight="1921" tilecount="42" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
- <tile id="0" type="Ammo">
+ <tile id="0" type="ammo">
   <image width="64" height="64" source="../sprites/static/ammo.png"/>
  </tile>
- <tile id="1">
+ <tile id="1" type="blood_bones">
   <image width="64" height="64" source="../sprites/static/blood_bones.png"/>
  </tile>
- <tile id="2">
+ <tile id="2" type="bones1">
   <image width="64" height="64" source="../sprites/static/bones1.png"/>
  </tile>
- <tile id="3">
+ <tile id="3" type="bones2">
   <image width="64" height="64" source="../sprites/static/bones2.png"/>
  </tile>
- <tile id="4">
+ <tile id="4" type="cage">
   <image width="64" height="64" source="../sprites/static/cage.png"/>
  </tile>
  <tile id="5">
   <image width="897" height="1921" source="../sprites/static/candlebra.png"/>
  </tile>
- <tile id="6">
+ <tile id="6" type="food">
   <image width="64" height="64" source="../sprites/static/food.png"/>
  </tile>
- <tile id="7">
+ <tile id="7" type="guard_dead">
   <image width="64" height="64" source="../sprites/static/guard_dead.png"/>
  </tile>
  <tile id="8" type="Guard">
   <image width="64" height="64" source="../sprites/static/guard_stand.png"/>
  </tile>
- <tile id="9">
+ <tile id="9" type="knight_armor">
   <image width="64" height="64" source="../sprites/static/knight-armor.png"/>
  </tile>
  <tile id="10">
@@ -117,5 +117,14 @@
  </tile>
  <tile id="38">
   <image width="64" height="64" source="../sprites/static/table_with_chairs.png"/>
+ </tile>
+ <tile id="39" type="Dog">
+  <image width="64" height="64" source="../sprites/npc/dog/0.png"/>
+ </tile>
+ <tile id="40">
+  <image width="64" height="64" source="../sprites/static/flag.png"/>
+ </tile>
+ <tile id="41">
+  <image width="64" height="64" source="../sprites/static/tree.png"/>
  </tile>
 </tileset>

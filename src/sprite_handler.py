@@ -39,6 +39,8 @@ class SpriteHandler:
                     tile = self.game.tmx_map.get_tile_properties(column_index, row_index, TMX_NPC_LAYER_INDEX)
                     if tile['type'] == 'Guard':
                         add_npc(Npc(game, pos=(column_index + 0.5, row_index + 0.5)))
+                    elif tile['type'] == 'Dog':
+                        add_npc(Dog(game, pos=(column_index + 0.5, row_index + 0.5)))
 
     def update(self):
         [sprite.update() for sprite in self.sprite_list]

@@ -5,9 +5,9 @@ from sound_handler import *
 class Npc(AnimatedSprite):
     def __init__(self, game, path='assets/sprites/npc/guard/0.png',
                  pos=(35.5, 61.5),
-                 scale=0.8,
-                 shift=0.2,
-                 animation_time=180):
+                 scale=1.0,
+                 shift=0.0,
+                 animation_time=200):
         super().__init__(game, path, pos, scale, shift, animation_time)
         self.attack_images = self.get_images(self.path + '/attack')
         self.death_images = self.get_images(self.path + '/death')
@@ -15,6 +15,7 @@ class Npc(AnimatedSprite):
         self.pain_images = self.get_images(self.path + '/pain')
         self.walk_images = self.get_images(self.path + '/walk')
 
+        self.idle = True
         self.attack_distance = randint(3, 6)
         self.speed = 0.03
         self.size = 10
@@ -34,12 +35,35 @@ class Npc(AnimatedSprite):
             if self.pain:
                 self.animate_pain()
             elif self.is_line_of_sight_to_player:
-                self.animate(self.walk_images)
-                self.movement()
+                self.check_idle()
+                if self.dist < self.attack_distance:
+                    self.animate(self.attack_images)
+                    self.attack_player()
+                else:
+                    self.animate(self.walk_images)
+                    self.movement()
             else:
                 self.animate(self.idle_images)
         else:
             self.animate_death()
+
+
+    def check_idle(self):
+        if self.idle:
+            rand = randint(1, 100)
+            if rand < 2:
+                self.game.sound_handler.play_sound(Sounds.NPC_TALK_KOMM_HIER_SCHWEIN)
+            elif rand < 5:
+                self.game.sound_handler.play_sound(Sounds.NPC_TALK_SCHUTZ_STAFFEL)
+            elif rand < 10:
+                self.game.sound_handler.play_sound(Sounds.NPC_TALK_GUTEN_TAG)
+        self.idle = False
+        
+    def attack_player(self):
+        if self.animation_trigger:
+            self.game.sound_handler.play_sound(Sounds.NPC_PISTOL_FIRE)
+            if random() < self.attack_accuracy:
+                self.game.player.get_damage(self.attack_damage)
 
     def update(self):
         self.check_animation_time()
@@ -89,6 +113,7 @@ class Npc(AnimatedSprite):
         if self.health < 1:
             self.alive = False
             self.game.sound_handler.play_sound(Sounds.NPC_DEATH)
+            self.game.sprite_handler.add_sprite(Sprite(self.game, path='assets/sprites/static/ammo.png', position=(self.x, self.y)))
 
     @property
     def map_pos(self):
@@ -169,3 +194,17 @@ class Npc(AnimatedSprite):
                             (MAP_RECT_SIZE * self.x, MAP_RECT_SIZE * self.y), 2)
 
     
+class Dog(Npc):
+    def __init__(self, game, path='assets/sprites/npc/dog/0.png',
+                 pos=(35.5, 61.5),
+                 scale=1.0,
+                 shift=0.0,
+                 animation_time=200):
+        super().__init__(game, path, pos, scale, shift, animation_time)
+              
+        self.attack_distance = 2
+        self.speed = 0.04
+        self.size = 10
+        self.health = 100
+        self.attack_damage = 10
+        self.attack_accuracy = 0.15

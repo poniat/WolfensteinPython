@@ -10,7 +10,7 @@ class Player:
         self.x, self.y = self.get_starting_position(self.game.tmx_map)
         self.angle = PLAYER_ANGLE
         self.shot = False
-        
+        self.health = PLAYER_MAX_HEALTH
 
     def single_fire_event(self, event):
         if event.type == pg.MOUSEBUTTONDOWN:
@@ -76,6 +76,8 @@ class Player:
         mx, my = pg.mouse.get_pos()
         if mx < MOUSE_BORDER_LEFT or mx > MOUSE_BORDER_RIGHT:
             pg.mouse.set_pos([HALF_WIDTH, HALF_HEIGHT])
+        if my < MOUSE_BORDER_TOP or my > MOUSE_BORDER_BOTTOM:
+            pg.mouse.set_pos([HALF_WIDTH, HALF_HEIGHT])
         self.rel = pg.mouse.get_rel()[0]
         self.rel = max(-MOUSE_MAX_REL, min(MOUSE_MAX_REL, self.rel))
         self.angle += self.rel * MOUSE_SENSITIVITY * self.game.delta_time
@@ -100,6 +102,10 @@ class Player:
                     if tile['type'] == 'Player':
                         return column_index + 0.5, row_index + 0.5
 
+    def get_damage(self, damage):
+        self.health -= damage
+        self.game.object_renderer.player_damage()
+        
     @property
     def position(self):
         return self.x, self.y

@@ -6,7 +6,7 @@ from settings import *
 from map import *
 from player import *
 from raycasting import *
-from wall_renderer import *
+from object_renderer import *
 from sprite import *
 from animated_sprite import *
 from sprite_handler import *
@@ -28,7 +28,7 @@ class Game:
     def new_game(self):        
         self.map = Map(self)
         self.player = Player(self)
-        self.wall_renderer = WallRenderer(self)
+        self.object_renderer = ObjectRenderer(self)
         self.raycasting = RayCasting(self)
         self.sprite_handler = SpriteHandler(self)
         self.weapon = Weapon(self)
@@ -51,7 +51,7 @@ class Game:
             self.player.draw()
             self.weapon.draw()
         else:
-            self.wall_renderer.draw()
+            self.object_renderer.draw()
             self.weapon.draw()
             if self.is_minimap_visible:
                 self.map.draw()
