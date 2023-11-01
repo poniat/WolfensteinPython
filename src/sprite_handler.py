@@ -27,7 +27,7 @@ class SpriteHandler:
                     tile = self.game.tmx_map.get_tile_properties(column_index, row_index, TMX_ITEMS_LAYER_INDEX)
                     asset_path = tile['source']
                     final_path = asset_path.replace('..', 'assets')
-                    add_sprite(Sprite(game, path=final_path, position=(column_index + 0.5, row_index + 0.5)))
+                    add_sprite(Sprite(game, type=tile['type'], path=final_path, position=(column_index + 0.5, row_index + 0.5)))
 
         #load NPCs
         npc_layer = self.game.tmx_map.get_layer_by_name('npc')
@@ -38,9 +38,9 @@ class SpriteHandler:
                 if cell != 0:
                     tile = self.game.tmx_map.get_tile_properties(column_index, row_index, TMX_NPC_LAYER_INDEX)
                     if tile['type'] == 'Guard':
-                        add_npc(Npc(game, pos=(column_index + 0.5, row_index + 0.5)))
+                        add_npc(Npc(game, tile['type'], pos=(column_index + 0.5, row_index + 0.5)))
                     elif tile['type'] == 'Dog':
-                        add_npc(Dog(game, pos=(column_index + 0.5, row_index + 0.5)))
+                        add_npc(Dog(game, tile['type'], pos=(column_index + 0.5, row_index + 0.5)))
 
     def update(self):
         [sprite.update() for sprite in self.sprite_list]

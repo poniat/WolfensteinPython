@@ -26,16 +26,25 @@ class Game:
         self.tmx_map = self.load_tiled_map("assets/maps/episode1-floor1.tmx")
         self.is_minimap_visible = False
         self.new_game()
+
+    def restart_floor(self):
+        self.sprite_handler = SpriteHandler(self)
+        self.player.restart()
         
+
     def new_game(self):        
         self.map = Map(self)
         self.player = Player(self)
         self.object_renderer = ObjectRenderer(self)
         self.raycasting = RayCasting(self)
         self.sprite_handler = SpriteHandler(self)
-        self.weapon = Weapon(self)
+        self.pistol = Weapon(self, 'pistol')
+        self.knife = Knife(self, 'knife')
+        self.rifle = Rifle(self, 'rifle')
+        self.minigun = Minigun(self, 'minigun')
+        self.weapon = self.pistol
         self.sound_handler = SoundHandler()
-        self.npc = Npc(self)
+        #self.npc = Npc(self, 'npc')
         
     def update(self):
         self.player.update()
@@ -68,16 +77,20 @@ class Game:
     def check_events(self):
         for event in pg.event.get():
             if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
-                pg.quit()
-                sys.exit()
-            self.player.single_fire_event(event)
+                self.quit()
+            #self.player.single_fire_event(event)
+            #self.player.attack_event(event)
 
     def run(self):
         while True:
             self.check_events()
             self.update()
             self.draw()
-   
+
+    def quit(self):
+        pg.quit()
+        sys.exit()
+        
 if __name__ == '__main__':
     game = Game()
     game.run()

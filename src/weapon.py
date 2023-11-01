@@ -1,10 +1,10 @@
 from animated_sprite import *
 
 class Weapon(AnimatedSprite):
-    def __init__(self, game, path='assets/sprites/weapon/pistol/0.png',
-                 scale=GAME_SCALE,
-                 animation_time=90):
-        super().__init__(game=game, path=path, scale=scale, animation_time=animation_time)
+    def __init__(self, game, type, path='assets/sprites/weapon/pistol/0.png',
+                 scale=GAME_SCALE * 2,
+                 animation_time=100):
+        super().__init__(game=game, type=type, path=path, scale=scale, animation_time=animation_time)
         self.images = deque(
             [pg.transform.scale(img, (self.image.get_width() * scale, self.image.get_height() * scale))
              for img in self.images])
@@ -32,3 +32,14 @@ class Weapon(AnimatedSprite):
         self.check_animation_time()
         self.animate_shot()
         
+class Knife(Weapon):
+    def __init__(self, game, type, path='assets/sprites/weapon/knife/0.png'):
+        super().__init__(game=game, type=type, path=path, scale=GAME_SCALE * 2, animation_time=80)
+
+class Rifle(Weapon):
+    def __init__(self, game, type, path='assets/sprites/weapon/rifle/0.png'):
+        super().__init__(game=game, type=type, path=path, scale=GAME_SCALE * 2, animation_time=30)
+
+class Minigun(Weapon):
+    def __init__(self, game, type, path='assets/sprites/weapon/minigun/0.png'):
+        super().__init__(game=game, type=type, path=path, scale=GAME_SCALE * 2, animation_time=15)

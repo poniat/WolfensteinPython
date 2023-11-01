@@ -3,12 +3,12 @@ from random import randint, random, choice
 from sound_handler import *
 
 class Npc(AnimatedSprite):
-    def __init__(self, game, path='assets/sprites/npc/guard/0.png',
+    def __init__(self, game, type, path='assets/sprites/npc/guard/0.png',
                  pos=(35.5, 61.5),
                  scale=1.0,
                  shift=0.0,
                  animation_time=200):
-        super().__init__(game, path, pos, scale, shift, animation_time)
+        super().__init__(game, type, path, pos, scale, shift, animation_time)
         self.attack_images = self.get_images(self.path + '/attack')
         self.death_images = self.get_images(self.path + '/death')
         self.idle_images = self.get_images(self.path + '/idle')
@@ -19,7 +19,8 @@ class Npc(AnimatedSprite):
         self.attack_distance = randint(3, 6)
         self.speed = 0.03
         self.size = 10
-        self.health = 100
+        self.health = 25
+        self.kill_score = 100
         self.attack_damage = 10
         self.attack_accuracy = 0.15
         self.alive = True
@@ -113,7 +114,7 @@ class Npc(AnimatedSprite):
         if self.health < 1:
             self.alive = False
             self.game.sound_handler.play_sound(Sounds.NPC_DEATH)
-            self.game.sprite_handler.add_sprite(Sprite(self.game, path='assets/sprites/static/ammo.png', position=(self.x, self.y)))
+            self.game.sprite_handler.add_sprite(Sprite(self.game, type='ammo', path='assets/sprites/static/ammo.png', position=(self.x, self.y)))
 
     @property
     def map_pos(self):
@@ -195,16 +196,17 @@ class Npc(AnimatedSprite):
 
     
 class Dog(Npc):
-    def __init__(self, game, path='assets/sprites/npc/dog/0.png',
+    def __init__(self, game, type, path='assets/sprites/npc/dog/0.png',
                  pos=(35.5, 61.5),
                  scale=1.0,
                  shift=0.0,
                  animation_time=200):
-        super().__init__(game, path, pos, scale, shift, animation_time)
+        super().__init__(game, type, path, pos, scale, shift, animation_time)
               
         self.attack_distance = 2
         self.speed = 0.04
         self.size = 10
-        self.health = 100
+        self.health = 1
+        self.kill_score = 200
         self.attack_damage = 10
         self.attack_accuracy = 0.15

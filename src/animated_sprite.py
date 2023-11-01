@@ -7,9 +7,9 @@ from collections import deque
 
 
 class AnimatedSprite(Sprite):
-    def __init__(self, game, path='assets/sprites/animated/green_light/0.png',
-                 position=(39.5, 57.5), scale=0.8, shift=0.15, animation_time=120):
-        super().__init__(game, path, position, scale, shift)
+    def __init__(self, game, type, path='assets/sprites/animated/green_light/0.png',
+                 position=(39.5, 57.5), scale=1.0, shift=0.0, animation_time=120):
+        super().__init__(game, type, path, position, scale, shift)
         self.animation_time = animation_time
         self.path = path.rsplit('/', 1)[0]
         self.images = self.get_images(self.path)
