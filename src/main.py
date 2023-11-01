@@ -38,9 +38,13 @@ class Game:
         self.object_renderer = ObjectRenderer(self)
         self.raycasting = RayCasting(self)
         self.sprite_handler = SpriteHandler(self)
-        self.weapon = Weapon(self)
+        self.pistol = Weapon(self, 'pistol')
+        self.knife = Knife(self, 'knife')
+        self.rifle = Rifle(self, 'rifle')
+        self.minigun = Minigun(self, 'minigun')
+        self.weapon = self.pistol
         self.sound_handler = SoundHandler()
-        self.npc = Npc(self)
+        #self.npc = Npc(self, 'npc')
         
     def update(self):
         self.player.update()
@@ -74,7 +78,8 @@ class Game:
         for event in pg.event.get():
             if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
                 self.quit()
-            self.player.single_fire_event(event)
+            #self.player.single_fire_event(event)
+            #self.player.attack_event(event)
 
     def run(self):
         while True:

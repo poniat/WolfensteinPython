@@ -3,11 +3,11 @@ import pygame as pg
 import math
 from sound_handler import *
 from weapons import *
+from main import *
 
 class Player:
-    def __init__(self, game):
+    def __init__(self, game: Game):
         self.game = game
-        #self.x, self.y = PLAYER_START_POSITION
         self.x, self.y = self.get_starting_position(self.game.tmx_map)
         self.angle = PLAYER_ANGLE
         self.shot = False
@@ -25,11 +25,44 @@ class Player:
         self.found_gold_key = True
         self.found_silver_key = True
         self.rel = 0
+        self.shoot_continuous = False
+        self.last_shot_time = 0
+
+    def update(self):
+        self.movement()
+        self.mouse_control()
+        self.change_weapon()
+        self.attack()
+
+    def attack(self):
+        mouse_buttons = pg.mouse.get_pressed()
+        if mouse_buttons[0]:
+            if not self.shot and not self.game.weapon.is_reloading:
+                if self.active_weapon == Weapons.KNIFE:
+                    self.play_active_weapon_sound()
+                    self.shot = True
+                    self.game.weapon.is_reloading = True
+                elif self.ammo > 0:
+                    self.ammo -= 1
+                    self.play_active_weapon_sound()
+                    self.shot = True
+                    self.game.weapon.is_reloading = True
+            
+    def play_active_weapon_sound(self):
+        if self.active_weapon == Weapons.KNIFE:
+            self.game.sound_handler.play_sound(Sounds.PLAYER_KNIFE)
+        elif self.active_weapon == Weapons.PISTOL:
+            self.game.sound_handler.play_sound(Sounds.PLAYER_PISTOL)
+        elif self.active_weapon == Weapons.RIFLE:
+            self.game.sound_handler.play_sound(Sounds.PLAYER_RIFLE)
+        elif self.active_weapon == Weapons.MINIGUN:
+            self.game.sound_handler.play_sound(Sounds.PLAYER_MINIGUN)
 
     def restart(self):
         self.health = PLAYER_MAX_HEALTH
         self.ammo = 8
         self.active_weapon = Weapons.PISTOL
+        self.game.weapon = self.game.pistol
         self.found_gold_key = False
         self.found_silver_key = False
         self.x, self.y = self.get_starting_position(self.game.tmx_map)
@@ -46,22 +79,6 @@ class Player:
                 self.game.restart_floor()
             else:
                 self.game.quit()
-
-    def single_fire_event(self, event):
-        if event.type == pg.MOUSEBUTTONDOWN:
-            if event.button == 1 and not self.shot and not self.game.weapon.is_reloading:
-                if self.active_weapon == Weapons.KNIFE:
-                    self.game.sound_handler.play_sound(Sounds.PLAYER_KNIFE)
-                    self.game.weapon.is_reloading = True
-                else:
-                    if self.ammo > 0:
-                        self.ammo -= 1
-                        self.game.sound_handler.play_sound(Sounds.PLAYER_PISTOL)
-                        self.shot = True
-                        self.game.weapon.is_reloading = True
-                    else:
-                        #no ammo
-                        pass
 
     def movement(self):
         sin_a = math.sin(self.angle)
@@ -99,6 +116,7 @@ class Player:
             self.game.is_minimap_visible = not self.game.is_minimap_visible
 
         self.check_wall_collision(dx, dy)
+        self.check_sprite_collision(dx, dy)
 
         if keys[pg.K_LEFT]:
             self.angle -= PLAYER_ROTATION_SPEED * self.game.delta_time
@@ -116,6 +134,20 @@ class Player:
         if self.check_wall(int(self.x), int(self.y + dy * scale)):
             self.y += dy
     
+    def check_sprite_collision(self, dx, dy):
+        for sprite in enumerate(self.game.sprite_handler.sprite_list):
+            if sprite[1].type == 'ammo':
+                self.increase_ammo(8)
+                self.game.sound_handler.play_sound(Sounds.AMMO)
+                self.game.sprite_handler.sprite_list.pop(sprite[0])
+                break
+
+            
+    def increase_ammo(self, quantity):
+        self.ammo += quantity
+        if self.ammo > PLAYER_MAX_AMMO:
+            self.ammo = PLAYER_MAX_AMMO
+
     def mouse_control(self):
         mx, my = pg.mouse.get_pos()
         if mx < MOUSE_BORDER_LEFT or mx > MOUSE_BORDER_RIGHT:
@@ -130,17 +162,16 @@ class Player:
         keys = pg.key.get_pressed()
         if keys[pg.K_1]:
             self.active_weapon = Weapons.KNIFE
+            self.game.weapon = self.game.knife
         if keys[pg.K_2]:
             self.active_weapon = Weapons.PISTOL
+            self.game.weapon = self.game.pistol
         if keys[pg.K_3]:
             self.active_weapon = Weapons.RIFLE
+            self.game.weapon = self.game.rifle
         if keys[pg.K_4]:
             self.active_weapon = Weapons.MINIGUN
-
-    def update(self):
-        self.movement()
-        self.mouse_control()
-        self.change_weapon()
+            self.game.weapon = self.game.minigun    
 
     def draw(self):
         if IS_2D_MODEL_ENABLED:
