@@ -22,7 +22,7 @@ class Player:
         self.episode = 1
         self.floor = 1
         self.score = 0
-        self.ammo = 99
+        self.ammo = 8
         self.found_gold_key = False
         self.found_silver_key = False
         self.rel = 0
@@ -64,10 +64,12 @@ class Player:
     def restart(self):
         self.health = PLAYER_MAX_HEALTH
         self.ammo = 8
-        self.active_weapon = Weapons.PISTOL
-        self.game.weapon = self.game.pistol
         self.found_gold_key = False
         self.found_silver_key = False
+        self.weapon_rifle = False
+        self.weapon_minigun = False
+        self.active_weapon = Weapons.PISTOL
+        self.game.weapon = self.game.pistol
         self.x, self.y = self.get_starting_position(self.game.tmx_map)
         self.angle = PLAYER_ANGLE
         
@@ -76,6 +78,7 @@ class Player:
         if self.health < 1:
             self.lives -= 1
             if self.lives > 0:
+                self.game.sound_handler.play_sound(Sounds.GAME_OVER)
                 self.game.object_renderer.game_over()
                 pg.display.flip()
                 pg.time.delay(2000)

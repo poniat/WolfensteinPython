@@ -95,7 +95,7 @@ class Npc(AnimatedSprite):
     
     def attack_player(self):
         if not self.shot and not self.is_reloading:
-            self.game.sound_handler.play_sound(Sounds.PLAYER_PISTOL)
+            self.play_attack_sound()
             self.shot = True
             self.shots_fired += 1
             self.is_reloading = True
@@ -231,6 +231,9 @@ class Npc(AnimatedSprite):
         self.game.sound_handler.play_sound(Sounds.NPC_GUARD_DEATH)
         self.game.sprite_handler.add_sprite(Sprite(self.game, type='enemy_ammo', path='assets/sprites/static/ammo.png', position=(self.x, self.y)))
 
+    def play_attack_sound(self):
+        self.game.sound_handler.play_sound(Sounds.PLAYER_PISTOL)
+
     @property
     def map_pos(self):
         return int(self.x), int(self.y)
@@ -328,6 +331,9 @@ class Dog(Npc):
 
     def die(self):
         self.game.sound_handler.play_sound(Sounds.NPC_DOG_DEATH)
+    
+    def play_attack_sound(self):
+        self.game.sound_handler.play_sound(Sounds.NPC_DOG_ATTACK)
 
 class SS(Npc):
     def __init__(self, game, type, path='assets/sprites/npc/ss/0.png',

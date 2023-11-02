@@ -10,13 +10,26 @@ class SoundHandler:
 
     def load_sounds(self):
         self.sounds[Sounds.PLAYER_KNIFE] = pg.mixer.Sound('assets/sounds/knife.wav')
+        #self.sounds[Sounds.PLAYER_KNIFE] = pg.mixer.Sound('assets/sounds/knife_attack_8bit.wav')
         self.sounds[Sounds.PLAYER_PISTOL] = pg.mixer.Sound('assets/sounds/pistol-fire.ogg')
+        #self.sounds[Sounds.PLAYER_PISTOL] = pg.mixer.Sound('assets/sounds/pistol_attack_8bit.wav')
         self.sounds[Sounds.PLAYER_RIFLE] = pg.mixer.Sound('assets/sounds/SmgFire.ogg')
+        #self.sounds[Sounds.PLAYER_RIFLE] = pg.mixer.Sound('assets/sounds/rifle_attack_8bit.wav')
+        #self.sounds[Sounds.PLAYER_RIFLE] = pg.mixer.Sound('assets/sounds/rifle_attack_8bit_v2.wav')
+        
         self.sounds[Sounds.PLAYER_MINIGUN] = pg.mixer.Sound('assets/sounds/ChaingunFire.ogg')
+        #self.sounds[Sounds.PLAYER_MINIGUN] = pg.mixer.Sound('assets/sounds/minigun_attack_8bit.wav')
+
+        self.sounds[Sounds.GAME_OVER] = pg.mixer.Sound('assets/sounds/game_over.wav')
+
         self.sounds[Sounds.NPC_PAIN] = pg.mixer.Sound('assets/sounds/npc_pain.wav')
         self.sounds[Sounds.NPC_GUARD_DEATH] = pg.mixer.Sound('assets/sounds/npc_death.wav')
         self.sounds[Sounds.NPC_DOG_DEATH] = pg.mixer.Sound('assets/sounds/Dog Death.wav')
+        self.sounds[Sounds.NPC_DOG_ATTACK] = pg.mixer.Sound('assets/sounds/dog.wav')
+        #self.sounds[Sounds.NPC_DOG_DEATH] = pg.mixer.Sound('assets/sounds/dog_death_8bit.wav')
+        #self.sounds[Sounds.NPC_DOG_ATTACK] = pg.mixer.Sound('assets/sounds/dog_attack_8bit.wav')
         self.sounds[Sounds.NPC_PISTOL_FIRE] = pg.mixer.Sound('assets/sounds/EnemyPistolFire.ogg')
+        #self.sounds[Sounds.NPC_PISTOL_FIRE] = pg.mixer.Sound('assets/sounds/pistol_attack_8bit.wav')
 
         self.sounds[Sounds.NPC_TALK_SCHUTZ_STAFFEL] = pg.mixer.Sound('assets/sounds/Schutzstaffel.ogg')
         self.sounds[Sounds.NPC_TALK_KOMM_HIER_SCHWEIN] = pg.mixer.Sound('assets/sounds/KommherrSchwien.ogg')

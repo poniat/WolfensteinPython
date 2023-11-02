@@ -5,6 +5,8 @@ class Sounds(Enum):
     PLAYER_PISTOL = 2
     PLAYER_RIFLE = 3
     PLAYER_MINIGUN = 4
+
+    GAME_OVER = 10
      
     NPC_PAIN = 100
     NPC_GUARD_DEATH = 101
@@ -14,6 +16,7 @@ class Sounds(Enum):
     NPC_TALK_SCHUTZ_STAFFEL = 105
 
     NPC_DOG_DEATH = 110
+    NPC_DOG_ATTACK = 111
 
     AMMO = 200
     FOOD = 201
