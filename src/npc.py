@@ -88,7 +88,8 @@ class Npc(AnimatedSprite):
         look = 16
 
         #Player is considered hit if: [RAND1] < ( [SPEED] - ( [DIST] x [LOOK] ) )
-        print('Shot nr :' + str(self.shots_fired) + '. Hit: ' + str(rand1 < (speed - (dist * look))))
+        if NPC_SHOT_DEBUG:
+            print('Shot nr :' + str(self.shots_fired) + '. Hit: ' + str(rand1 < (speed - (dist * look))))
         return rand1 < (speed - (dist * look))
 
     
@@ -119,7 +120,8 @@ class Npc(AnimatedSprite):
                 elif GAME_DIFFICULTY == Difficulty.IMPOSSIBLE_IAM_DEATH_INCARNATE:
                     damage *= 4
 
-                print('Damage to player: ' + str(int(damage)))
+                if NPC_SHOT_DEBUG:
+                    print('Damage to player: ' + str(int(damage)))
 
                 if damage > 0:
                     self.player.get_damage(damage)
@@ -175,28 +177,47 @@ class Npc(AnimatedSprite):
             self.pain = False
 
     def check_if_hit_by_player(self):
+        # if self.is_line_of_sight_to_player and self.game.player.shot:
+        player_distance_to_npc = self.dist
+        if GAME_DIFFICULTY == Difficulty.EASY_CAN_I_PLAY_DADDY:
+            player_distance_to_npc *= 1.5
+
         if self.is_line_of_sight_to_player and self.game.player.shot:
             if HALF_WIDTH - self.sprite_half_width < self.screen_x < HALF_WIDTH + self.sprite_half_width:
                 rand1 = randint(0, 255)
-                if self.dist >= 4 and not rand1 / 12 < self.dist:
-                    return                                  
-                self.game.player.shot = False
+                if self.dist >= 4:
+                    if rand1 / 12 < self.dist:
+                        #print('Player shot LONG (dist: ' + str(int(self.dist)) + ') and ' + str(self.game.player.shots_fired) + ' HIT', end='')
+                        pass
+                    else:
+                        #print('Player shot LONG (dist: ' + str(int(self.dist)) + ') but ' + str(self.game.player.shots_fired) + ' MISS')
+                        return
+                else:
+                    #print('Player shot ' + str(self.game.player.shots_fired) + ' HIT', end='')
+                    pass
                 self.game.sound_handler.play_sound(Sounds.NPC_PAIN)
                 self.pain = True
                 self.health -= self.calculate_damage_to_npc()
                 self.check_health()
+            else:
+                #print('Player shot ' + str(self.game.player.shots_fired) + ' MISS')    
+                pass
 
     def calculate_damage_to_npc(self):
         damage = 0
         if self.game.player.active_weapon == Weapons.KNIFE:
             rand2 = randint(0, 255)
             damage = rand2 / 16
+            #print(' KNIFE', end='')
         if self.dist >= 2:
             rand2 = randint(0, 255)
             damage = rand2 / 6
+            #print(' MEDIUM range', end='')
         else:
             rand2 = randint(0, 255)
             damage = rand2 / 4
+            #print(' SHORT range', end='')
+        #print(' DAMAGE ' + str(int(damage)))
         return damage
 
 

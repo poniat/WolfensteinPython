@@ -26,4 +26,4 @@ class Sounds(Enum):
     KEY = 208
     PLAYER_1UP = 209
     FOUND_RIFLE = 210
-    FOUND_MINIGUN = 210
+    FOUND_MINIGUN = 211

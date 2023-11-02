@@ -22,17 +22,18 @@ class Player:
         self.episode = 1
         self.floor = 1
         self.score = 0
-        self.ammo = 8
+        self.ammo = 99
         self.found_gold_key = False
         self.found_silver_key = False
         self.rel = 0
         self.shoot_continuous = False
         self.last_shot_time = 0
+        self.shots_fired = 0
 
     def update(self):
         self.movement()
         self.mouse_control()
-        self.change_weapon()
+        self.check_change_weapon()
         self.attack()
 
     def attack(self):
@@ -47,6 +48,7 @@ class Player:
                     self.ammo -= 1
                     self.play_active_weapon_sound()
                     self.shot = True
+                    self.shots_fired += 1
                     self.game.weapon.is_reloading = True
             
     def play_active_weapon_sound(self):
@@ -169,7 +171,7 @@ class Player:
                     self.game.sprite_handler.sprite_list.pop(sprite[0])
                     break
                 if sprite[1].type == 'key_golden':
-                    self.found_gold_key_key = True
+                    self.found_gold_key = True
                     self.game.sound_handler.play_sound(Sounds.KEY)
                     self.game.sprite_handler.sprite_list.pop(sprite[0])
                     break
@@ -194,13 +196,13 @@ class Player:
                     self.game.sprite_handler.sprite_list.pop(sprite[0])
                     break
                 if sprite[1].type == 'Rifle':
-                    self.weapon_rifle = True
-                    self.game.sound_handler.play_sound(Sounds.GOLDEN_CROWN)
+                    self.pick_up_rifle()
+                    self.game.sound_handler.play_sound(Sounds.FOUND_RIFLE)
                     self.game.sprite_handler.sprite_list.pop(sprite[0])
                     break
                 if sprite[1].type == 'Minigun':
-                    self.weapon_rifle = True
-                    self.game.sound_handler.play_sound(Sounds.GOLDEN_CROWN)
+                    self.pick_up_minigun()
+                    self.game.sound_handler.play_sound(Sounds.FOUND_MINIGUN)
                     self.game.sprite_handler.sprite_list.pop(sprite[0])
                     break
                 if sprite[1].type == 'life_up':
@@ -229,7 +231,7 @@ class Player:
         self.rel = max(-MOUSE_MAX_REL, min(MOUSE_MAX_REL, self.rel))
         self.angle += self.rel * MOUSE_SENSITIVITY * self.game.delta_time
 
-    def change_weapon(self):
+    def check_change_weapon(self):
         keys = pg.key.get_pressed()
         if keys[pg.K_1]:
             self.active_weapon = Weapons.KNIFE
@@ -243,6 +245,16 @@ class Player:
         if keys[pg.K_4 and self.weapon_minigun]:
             self.active_weapon = Weapons.MINIGUN
             self.game.weapon = self.game.minigun    
+
+    def pick_up_rifle(self):
+        self.weapon_rifle = True
+        self.active_weapon = Weapons.RIFLE
+        self.game.weapon = self.game.rifle
+
+    def pick_up_minigun(self):
+        self.weapon_minigun = True
+        self.active_weapon = Weapons.MINIGUN
+        self.game.weapon = self.game.minigun
 
     def draw(self):
         if IS_2D_MODEL_ENABLED:
